@@ -7,14 +7,19 @@ spring:
 
   cloud:
     gateway:
-      discovery:
-        locator:
-          enabled: true
-          lower-case-service-id: true
+      routes:
+        - id: auth-service
+          uri: lb://AUTH-SERVICE
+          predicates:
+            - Path=/auth/**
+
+        - id: policy-service
+          uri: lb://POLICY-SERVICE
+          predicates:
+            - Path=/policies/**
 
 eureka:
   client:
+    register-with-eureka: false
     service-url:
-      defaultZone: http://localhost:8761/eureka/
-    register-with-eureka: true
-    fetch-registry: true
+      defaultZone: http://localhost:8761/eureka
