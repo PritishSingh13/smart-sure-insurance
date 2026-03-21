@@ -21,7 +21,7 @@ This project demonstrates authentication, API Gateway routing, service discovery
 ---
 
 <p align="center">
-<img src="https://media.giphy.com/media/v1.Y2lkPWVjZjA1ZTQ3c3Z0eTZ4b2czbmtjdms0bjRkeWIwenpxYzMxamh0OXk5MWIwYjByMiZlcD12MV9naWZzX3JlbGF0ZWQmY3Q9Zw/DX1cytoIQvnmgqBlQ3/giphy.gif" width="80%" />
+<img src="https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExMWZ0ZG4wemJ4eTBmY2VmbWRmdG1iaHlpZTM4YWo4d3B3ZzdwbWZ2OSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/78XCFBGOlS6keY1Bil/giphy.gif" width="70%" />
 </p>
 
 ---
@@ -61,7 +61,7 @@ EUREKA SERVER
 ---
 
 <p align="center">
-<img src="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExdzBjbHI4eG0ydTkxYzNrenJka240MXV1cXRyd3Zmd3FreDd6NTZheSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/zkRQ24mPZ1HvHj9pZ6/giphy.gif" width="60%" />
+<img src="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExdzBjbHI4eG0ydTkxYzNrenJka240MXV1cXRyd3Zmd3FreDd6NTZheSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/zkRQ24mPZ1HvHj9pZ6/giphy.gif" width="50%" />
 </p>
 
 ---
@@ -77,7 +77,7 @@ EUREKA SERVER
 - Maven  
 
 <p align="center">
-<img src="https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExbnJld3lreG1ydzg1YW40Z3ZucDI3enltdDNhM21vaGFhY25sYmZ4dCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/M3WRGRcGtJrFXMTZX5/giphy.gif" width="60%" />
+<img src="https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExbnJld3lreG1ydzg1YW40Z3ZucDI3enltdDNhM21vaGFhY25sYmZ4dCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/M3WRGRcGtJrFXMTZX5/giphy.gif" width="50%" />
 </p>
 
 
