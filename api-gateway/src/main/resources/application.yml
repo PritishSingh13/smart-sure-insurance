@@ -18,8 +18,19 @@ spring:
           predicates:
             - Path=/policies/**
 
+        - id: claims-service
+          uri: lb://CLAIMS-SERVICE
+          predicates:
+            - Path=/claims/**
+          filters:
+            - JwtAuthenticationFilter
+
 eureka:
   client:
     register-with-eureka: false
     service-url:
       defaultZone: http://localhost:8761/eureka
+
+
+jwt:
+  secret: this_is_a_very_secret_key_for_smartsure_project_12345
