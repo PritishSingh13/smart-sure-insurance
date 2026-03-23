@@ -2,49 +2,68 @@ package com.smartsure.claimsservice.controller;
 
 import com.smartsure.claimsservice.entity.Claim;
 import com.smartsure.claimsservice.service.ClaimService;
-import jakarta.servlet.http.HttpServletRequest;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
-@RequestMapping("/claims")
+@RequestMapping("/api/claims")
 public class ClaimController {
 
-    @Autowired
-    private ClaimService claimService;
+    private final ClaimService claimService;
 
-    // ✅ CREATE CLAIM (ONLY ADMIN)
-    @PostMapping
-    public Object createClaim(@RequestBody Claim claim,
-                              HttpServletRequest request) {
-
-        String role = request.getHeader("X-User-Role");
-
-        if (role == null || !role.equals("ADMIN")) {
-            return "❌ Access Denied: Only ADMIN can create claims";
-        }
-
-        return claimService.createClaim(claim);
+    public ClaimController(ClaimService claimService) {
+        this.claimService = claimService;
     }
 
-    // ✅ GET ALL CLAIMS (USER + ADMIN)
+    // ==============================
+    // USER: UPLOAD CLAIM
+    // ==============================
+    @PostMapping("/upload")
+    @PreAuthorize("#role == 'CUSTOMER' or #role == 'ADMIN'")
+    public Claim uploadClaim(@RequestBody Claim claim,
+                             @RequestHeader("X-User-Role") String role) {
+        return claimService.uploadClaim(claim);
+    }
+
+    // ==============================
+    // USER: INITIATE CLAIM PROCESS
+    // ==============================
+    @PostMapping("/initiate")
+    @PreAuthorize("#role == 'CUSTOMER' or #role == 'ADMIN'")
+    public Claim initiateClaim(@RequestParam Long claimId,
+                               @RequestHeader("X-User-Role") String role) {
+        return claimService.initiateClaim(claimId);
+    }
+
+    // ==============================
+    // USER: GET CLAIM STATUS
+    // ==============================
+    @GetMapping("/status/{claimId}")
+    @PreAuthorize("#role == 'CUSTOMER' or #role == 'ADMIN'")
+    public String getClaimStatus(@PathVariable Long claimId,
+                                 @RequestHeader("X-User-Role") String role) {
+        return claimService.getClaimStatus(claimId);
+    }
+
+    // ==============================
+    // ADMIN: REVIEW CLAIM
+    // ==============================
+    @PutMapping("/admin/review/{claimId}")
+    @PreAuthorize("#role == 'ADMIN'")
+    public Claim reviewClaim(@PathVariable Long claimId,
+                             @RequestParam String status,
+                             @RequestHeader("X-User-Role") String role) {
+        return claimService.reviewClaim(claimId, status);
+    }
+
+    // ==============================
+    // ADMIN: GET ALL CLAIMS
+    // ==============================
     @GetMapping
-    public List<Claim> getAllClaims() {
+    @PreAuthorize("#role == 'ADMIN'")
+    public List<Claim> getAllClaims(@RequestHeader("X-User-Role") String role) {
         return claimService.getAllClaims();
-    }
-
-    // GET BY ID
-    @GetMapping("/{id}")
-    public Optional<Claim> getClaimById(@PathVariable Long id) {
-        return claimService.getClaimById(id);
-    }
-
-    // GET BY POLICY NUMBER
-    @GetMapping("/policy/{policyNumber}")
-    public List<Claim> getByPolicyNumber(@PathVariable String policyNumber) {
-        return claimService.getByPolicyNumber(policyNumber);
     }
 }

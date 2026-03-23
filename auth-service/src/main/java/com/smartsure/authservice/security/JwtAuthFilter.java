@@ -31,7 +31,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         String path = request.getRequestURI();
 
         // 🔓 Skip auth endpoints
-        if (path.startsWith("/auth/")) {
+        if (path.startsWith("/api/auth/")) {
             filterChain.doFilter(request, response);
             return;
         }
@@ -62,8 +62,9 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                     new UsernamePasswordAuthenticationToken(
                             email,
                             null,
-                            List.of(new SimpleGrantedAuthority("ROLE_" + role)) // 🔥 IMPORTANT
-                    );
+                            List.of(new SimpleGrantedAuthority("ROLE_" + role.trim().toUpperCase()))
+                    );// 🔥 IMPORTANT
+
 
             SecurityContextHolder.getContext().setAuthentication(authToken);
         }

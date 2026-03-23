@@ -26,12 +26,18 @@ public class JwtAuthenticationFilter
     public GatewayFilter apply(Config config) {
         return (exchange, chain) -> {
 
+            String path = exchange.getRequest().getURI().getPath();
+
+            // 🚨 SKIP AUTH ENDPOINTS
+            if (path.startsWith("/api/auth")) {
+                return chain.filter(exchange);
+            }
+
             System.out.println("🔥 JWT FILTER CALLED");
 
             String authHeader = exchange.getRequest().getHeaders().getFirst("Authorization");
 
             if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-                System.out.println("❌ NO TOKEN");
                 exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
                 return exchange.getResponse().setComplete();
             }
@@ -47,9 +53,6 @@ public class JwtAuthenticationFilter
                 String email = claims.getSubject();
                 String role = claims.get("role", String.class);
 
-                System.out.println("✅ JWT VALID → " + email + " | " + role);
-
-                // 🔥 NEW: PASS ROLE TO DOWNSTREAM SERVICE
                 exchange = exchange.mutate()
                         .request(exchange.getRequest().mutate()
                                 .header("X-User-Role", role)
@@ -60,7 +63,6 @@ public class JwtAuthenticationFilter
                 return chain.filter(exchange);
 
             } catch (Exception e) {
-                System.out.println("❌ INVALID TOKEN");
                 exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
                 return exchange.getResponse().setComplete();
             }
