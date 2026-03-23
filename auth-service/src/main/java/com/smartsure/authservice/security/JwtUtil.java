@@ -22,7 +22,7 @@ public class JwtUtil {
     public String generateToken(String email, String role) {
 
         Map<String, Object> claims = new HashMap<>();
-        claims.put("role", role);
+        claims.put("role", role.trim().toUpperCase());
 
         return Jwts.builder()
                 .setClaims(claims)

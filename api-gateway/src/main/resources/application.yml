@@ -11,17 +11,19 @@ spring:
         - id: auth-service
           uri: lb://AUTH-SERVICE
           predicates:
-            - Path=/auth/**
+            - Path=/api/auth/**
 
         - id: policy-service
           uri: lb://POLICY-SERVICE
           predicates:
-            - Path=/policies/**
+            - Path=/api/policies/**
+          filters:
+            - JwtAuthenticationFilter   # 🔥 ADD THIS LINE
 
         - id: claims-service
           uri: lb://CLAIMS-SERVICE
           predicates:
-            - Path=/claims/**
+            - Path=/api/claims/**
           filters:
             - JwtAuthenticationFilter
 
@@ -30,7 +32,6 @@ eureka:
     register-with-eureka: false
     service-url:
       defaultZone: http://localhost:8761/eureka
-
 
 jwt:
   secret: this_is_a_very_secret_key_for_smartsure_project_12345

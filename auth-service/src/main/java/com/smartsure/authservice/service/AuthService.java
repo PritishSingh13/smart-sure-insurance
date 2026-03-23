@@ -38,7 +38,13 @@ public class AuthService {
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setPhone(request.getPhone());
         user.setAddress(request.getAddress());
-        user.setRole("CUSTOMER");
+
+        // 🔥 STEP 1 FIX: CLEAN ROLE HANDLING
+        String role = (request.getRole() == null || request.getRole().isEmpty())
+                ? "CUSTOMER"
+                : request.getRole().trim().toUpperCase();
+
+        user.setRole(role);
 
         userRepository.save(user);
 
@@ -55,7 +61,10 @@ public class AuthService {
             throw new RuntimeException("Invalid credentials");
         }
 
-        String token = jwtUtil.generateToken(user.getEmail(), user.getRole());
+        // 🔥 STEP 1 FIX: CLEAN ROLE BEFORE JWT
+        String role = user.getRole().trim().toUpperCase();
+
+        String token = jwtUtil.generateToken(user.getEmail(), role);
 
         return new AuthResponse(token, "Login successful");
     }
