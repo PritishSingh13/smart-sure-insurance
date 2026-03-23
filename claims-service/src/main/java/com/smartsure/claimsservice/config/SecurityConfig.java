@@ -14,7 +14,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
-
+         //minor update
                 .csrf(csrf -> csrf.disable())
 
 
