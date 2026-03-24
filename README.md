@@ -18,17 +18,21 @@
 
 #  Project Overview
 
+<p align="justify">
+
 SmartSure Insurance Management System is a microservices-based backend platform designed to digitize the complete insurance lifecycle.
 
-Customers can register, purchase insurance policies, calculate premiums, upload claim documents, and initiate insurance claims through secure 
+Customers can register, purchase insurance policies, calculate premiums, upload claim documents, and initiate insurance claims through secure REST APIs.
 
-REST APIs. Administrative users manage insurance products, verify claim documentation, approve or reject claims, and generate operational
+Administrative users manage insurance products, verify claim documentation, approve or reject claims, and generate operational reports.
 
-reports.The system is built using Spring Boot microservices, with Spring Cloud Gateway acting as the API gateway for routing requests to 
+The system is built using Spring Boot microservices, with Spring Cloud Gateway acting as the API gateway for routing requests to backend services.
 
-backend services. Each microservice maintains its own database and communicates with other services through REST APIs or OpenFeign 
+Each microservice maintains its own database and communicates with other services through REST APIs or OpenFeign clients.
 
-clients,Front End REACT or Angular.
+A frontend layer (React or Angular) can be integrated for user interaction and visualization.
+
+</p>
 
 
 
