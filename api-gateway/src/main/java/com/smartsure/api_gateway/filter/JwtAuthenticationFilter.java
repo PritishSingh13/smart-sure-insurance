@@ -26,7 +26,7 @@ public class JwtAuthenticationFilter extends AbstractGatewayFilterFactory<JwtAut
     public static class Config {}
 
     // =========================
-    // SIGNING KEYY
+    // SIGNING KEY
     // =========================
     private Key getSignKey() {
         return Keys.hmacShaKeyFor(secret.getBytes());
