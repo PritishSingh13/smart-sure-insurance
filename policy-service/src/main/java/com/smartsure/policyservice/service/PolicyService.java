@@ -76,7 +76,7 @@ public class PolicyService {
     }
 
     // =========================
-    // DELETE POLICYY
+    // DELETE POLICY
     // =========================
     public String deletePolicy(Long id) {
         policyRepository.deleteById(id);
