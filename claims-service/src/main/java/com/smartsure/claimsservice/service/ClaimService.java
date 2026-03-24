@@ -104,7 +104,7 @@ public class ClaimService {
     }
 
     // =========================
-    // GET ALL CLAIMS
+    // GET ALL CLAIMSS
     // =========================
     public List<Claim> getAllClaims() {
         return claimRepository.findAll();
