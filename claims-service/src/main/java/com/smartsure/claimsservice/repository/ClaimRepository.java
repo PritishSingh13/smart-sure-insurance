@@ -9,5 +9,5 @@ import java.util.List;
 @Repository
 public interface ClaimRepository extends JpaRepository<Claim, Long> {
 
-    List<Claim> findByPolicyNumber(String policyNumber);
+    List<Claim> findByCreatedBy(String createdBy);
 }

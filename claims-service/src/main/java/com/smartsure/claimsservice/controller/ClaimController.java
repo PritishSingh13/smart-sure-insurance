@@ -2,10 +2,11 @@ package com.smartsure.claimsservice.controller;
 
 import com.smartsure.claimsservice.entity.Claim;
 import com.smartsure.claimsservice.service.ClaimService;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/claims")
@@ -17,53 +18,62 @@ public class ClaimController {
         this.claimService = claimService;
     }
 
-    // ==============================
-    // USER: UPLOAD CLAIM
-    // ==============================
+    // =========================
+    // USER: UPLOAD CLAIM (WITH FILE)
+    // =========================
     @PostMapping("/upload")
-    @PreAuthorize("#role == 'CUSTOMER' or #role == 'ADMIN'")
-    public Claim uploadClaim(@RequestBody Claim claim,
-                             @RequestHeader("X-User-Role") String role) {
-        return claimService.uploadClaim(claim);
+    public Claim uploadClaimWithFile(
+            @RequestParam("file") MultipartFile file,
+            @RequestParam("policyNumber") String policyNumber,
+            @RequestParam("claimantName") String claimantName,
+            @RequestParam("claimType") String claimType,
+            @RequestParam("claimAmount") Double claimAmount,
+            @RequestHeader("X-Auth-User") String userEmail
+    ) {
+        return claimService.uploadClaimWithFile(
+                file, policyNumber, claimantName, claimType, claimAmount, userEmail);
     }
 
-    // ==============================
-    // USER: INITIATE CLAIM PROCESS
-    // ==============================
+    // =========================
+    // USER: INITIATE CLAIM
+    // =========================
     @PostMapping("/initiate")
-    @PreAuthorize("#role == 'CUSTOMER' or #role == 'ADMIN'")
     public Claim initiateClaim(@RequestParam Long claimId,
-                               @RequestHeader("X-User-Role") String role) {
-        return claimService.initiateClaim(claimId);
+                               @RequestHeader("X-Auth-User") String userEmail) {
+        return claimService.initiateClaim(claimId, userEmail);
     }
 
-    // ==============================
-    // USER: GET CLAIM STATUS
-    // ==============================
+    // =========================
+    // USER: GET STATUS
+    // =========================
     @GetMapping("/status/{claimId}")
-    @PreAuthorize("#role == 'CUSTOMER' or #role == 'ADMIN'")
-    public String getClaimStatus(@PathVariable Long claimId,
-                                 @RequestHeader("X-User-Role") String role) {
-        return claimService.getClaimStatus(claimId);
+    public String getStatus(@PathVariable Long claimId,
+                            @RequestHeader("X-Auth-User") String userEmail) {
+        return claimService.getClaimStatus(claimId, userEmail);
     }
 
-    // ==============================
+    // =========================
     // ADMIN: REVIEW CLAIM
-    // ==============================
+    // =========================
     @PutMapping("/admin/review/{claimId}")
-    @PreAuthorize("#role == 'ADMIN'")
-    public Claim reviewClaim(@PathVariable Long claimId,
-                             @RequestParam String status,
-                             @RequestHeader("X-User-Role") String role) {
+    public String reviewClaim(@PathVariable Long claimId,
+                              @RequestParam String status) {
         return claimService.reviewClaim(claimId, status);
     }
 
-    // ==============================
+    // =========================
     // ADMIN: GET ALL CLAIMS
-    // ==============================
+    // =========================
     @GetMapping
-    @PreAuthorize("#role == 'ADMIN'")
-    public List<Claim> getAllClaims(@RequestHeader("X-User-Role") String role) {
+    public List<Claim> getAll() {
         return claimService.getAllClaims();
+    }
+
+    // =========================
+    // ADMIN: REPORTS
+    // =========================
+    @GetMapping("/admin/reports")
+    public Map<String, Long> getReports() {
+        return claimService.getReportData();
     }
 }

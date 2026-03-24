@@ -21,10 +21,26 @@ public class PolicyService {
     }
 
     // =========================
-    // CREATE POLICY (ADMIN)
+    // CREATE POLICY
     // =========================
     public Policy createPolicy(Policy policy) {
         return policyRepository.save(policy);
+    }
+
+    // =========================
+    // UPDATE POLICY (NEW)
+    // =========================
+    public Policy updatePolicy(Long id, Policy updatedPolicy) {
+
+        Policy existing = policyRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Policy not found with id: " + id));
+
+        existing.setPolicyName(updatedPolicy.getPolicyName());
+        existing.setPolicyType(updatedPolicy.getPolicyType());
+        existing.setPremium(updatedPolicy.getPremium());
+        existing.setDuration(updatedPolicy.getDuration());
+
+        return policyRepository.save(existing);
     }
 
     // =========================
@@ -43,7 +59,7 @@ public class PolicyService {
     }
 
     // =========================
-    // PURCHASE POLICY (USER)
+    // PURCHASE POLICY
     // =========================
     public String purchasePolicy(Long policyId, String userEmail) {
 
@@ -60,7 +76,7 @@ public class PolicyService {
     }
 
     // =========================
-    // DELETE POLICY (ADMIN)
+    // DELETE POLICY
     // =========================
     public String deletePolicy(Long id) {
         policyRepository.deleteById(id);
