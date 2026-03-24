@@ -1,189 +1,264 @@
-<h1 align="center"> SmartSure Insurance Microservices System</h1>
+
+
+<h1 align="center" style="font-size:40px;">
+ SmartSure Insurance Microservices System 
+</h1>
 
 <p align="center">
-A Spring Boot Microservices backend project built to understand real-world system design
-</p>
-
-<p align="center">
-This project demonstrates authentication, API Gateway routing, service discovery, and secure policy management
-</p>
-
----
-
-<p align="center">
-<img src="https://img.shields.io/badge/Java-21-blue" />
-<img src="https://img.shields.io/badge/SpringBoot-Microservices-brightgreen" />
-<img src="https://img.shields.io/badge/JWT-Security-orange" />
-<img src="https://img.shields.io/badge/MySQL-Database-blue" />
-<img src="https://img.shields.io/badge/Eureka-ServiceDiscovery-red" />
-</p>
-
----
-
-<p align="center">
-<img src="https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExMWZ0ZG4wemJ4eTBmY2VmbWRmdG1iaHlpZTM4YWo4d3B3ZzdwbWZ2OSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/78XCFBGOlS6keY1Bil/giphy.gif" width="70%" />
-</p>
-
----
-
-## 🧠 About This Project
-
-I built this project to understand how real backend systems work.
-
-Instead of a single monolithic application, I split everything into microservices and connected them using Spring Cloud tools.
-
-This helped me understand how authentication, routing, and service communication works in real production systems.
-
-
-<p align="center">
-<img src="https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExaTdidXV3ZDB2ZXRxaG0xa2ViNms1NG8yOGgwMXZrdzNyZXZjbmlkdiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/12W5Sg2koWYnwA/giphy.gif" width="70%" />
-</p
-
----
-
-## 🏗️ Architecture
-
-<pre style="background:#0d1117; color:#00ffcc; padding:15px; border-radius:10px;">
-CLIENT
-  |
-  v
-API GATEWAY (8080)
-  |
-  |-------------------|
-  |                   |
-AUTH SERVICE     POLICY SERVICE
-  |                   |
-JWT AUTH          MySQL DB
-  |
-EUREKA SERVER
-</pre>
-
----
-
-<p align="center">
-<img src="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExdzBjbHI4eG0ydTkxYzNrenJka240MXV1cXRyd3Zmd3FreDd6NTZheSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/zkRQ24mPZ1HvHj9pZ6/giphy.gif" width="50%" />
-</p>
-
----
-
-## ⚙️ Tech Stack
-
-- Java 21  
-- Spring Boot  
-- Spring Security  
-- JWT Authentication  
-- Spring Cloud (Eureka + API Gateway)  
-- MySQL  
-- Maven  
-
-<p align="center">
-<img src="https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExbnJld3lreG1ydzg1YW40Z3ZucDI3enltdDNhM21vaGFhY25sYmZ4dCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/M3WRGRcGtJrFXMTZX5/giphy.gif" width="50%" />
+  <img src="https://img.shields.io/badge/Java-21-blue?style=for-the-badge"/>
+  <img src="https://img.shields.io/badge/SpringBoot-Microservices-brightgreen?style=for-the-badge"/>
+  <img src="https://img.shields.io/badge/SpringCloud-Gateway-red?style=for-the-badge"/>
+  <img src="https://img.shields.io/badge/JWT-Security-orange?style=for-the-badge"/>
+  <img src="https://img.shields.io/badge/Eureka-Service%20Discovery-purple?style=for-the-badge"/>
+  <img src="https://img.shields.io/badge/MySQL-Database-blue?style=for-the-badge"/>
 </p>
 
 
 ---
 
-## 🔐 Authentication Flow
+#  Project Overview
 
-1. User logs in via Auth Service  
-2. JWT token is generated  
-3. Token is sent in request header  
-4. Policy Service validates token  
-5. Role-based access is applied  
+SmartSure Insurance Management System is a microservices-based backend platform designed to digitize the complete insurance lifecycle.
+
+Customers can register, purchase insurance policies,
+
+calculate premiums, upload claim documents, and initiate insurance claims through secure REST APIs.
+
+Administrative users manage insurance products, verify claim documentation, approve or reject claims, and generate operational reports.
+
+The system is built using Spring Boot microservices, with Spring Cloud Gateway acting as the API gateway for routing requests to backend 
+
+services. Each microservice maintains its own 
+
+database and communicates with other services through REST APIs or OpenFeign clients,Front End REACT or Angular.
+
+
 
 <p align="center">
-<img src="https://media.giphy.com/media/QNFhOolVeCzPQ2Mx85/giphy.gif" width="80%" />
+  <img src="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExcmpweXg2emk4c2J6bjBpcmZ1NXMwc2Y2ZHIzZWR5dzg2eHZkaWFtNyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/K3htdZ1XuVWVD5DZDZ/giphy.gif" width="420"/>
 </p>
 
 ---
 
-## 🌐 API Gateway Role
+##  System Architecture (High Level Design)
 
-- Single entry point for all requests  
-- Routes requests to correct microservice  
-- Handles centralized security flow  
+```mermaid
+graph TD
 
+U[User Customer/Admin]
+P[Postman Client]
 
-<p align="center">
-<img src="https://media.giphy.com/media/3o7TKtnuHOHHUjR38Y/giphy.gif" width="40%" />
-</p>
+G[API Gateway Spring Cloud Gateway]
 
----
+A[Auth Service JWT]
+S[Policy Service]
+C[Claims Service]
 
-## 📌 API Endpoints
+E[Eureka Server]
 
-### Auth Service
-- POST `/auth/register`  
-- POST `/auth/login`  
+DB[(MySQL Database)]
+FS[(File Storage uploads)]
 
-### Policy Service
-- POST `/policies`  
-- GET `/policies`  
-- GET `/policies/{id}`  
-- DELETE `/policies/{id}` 
+U --> P
+P --> G
 
-<p align="center">
-<img src="https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExc3p6c3J4N3ZiNGh4aWprM3gxZXZtZXEwZjJsZmN3Z3V3anBmZ3JzMCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/iFiPHGTAGJQXHOaXcu/giphy.gif" width="60%" />
-</p>
+G --> A
+G --> S
+G --> C
 
----
+A --> DB
+S --> DB
+C --> DB
 
-## 🧪 Testing Flow
+C --> FS
 
-- Register user  
-- Login and get JWT token  
-- Add token in Authorization header  
-- Access secured APIs via Gateway
-  
-<p align="center">
-<img src="https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExejM3NnAxdms1OXh4eGdkNmhuM3Y0bGMxYnd2NTdlY293ZGdtdm9pNiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/FfBoY4A3gMC9oetfU4/giphy.gif" width="60%" />
-</p>
+A --> E
+S --> E
+C --> E
+G --> E
+```
 
 ---
 
-## ⚠️ Challenges Faced
+#  Claim Lifecycle (Business Flow)
 
-- 401 Unauthorized errors  
-- Spring Security filter issues  
-- Eureka service registration confusion  
-- API Gateway routing problems  
-
-Fixing these helped me understand microservices deeply.
-
-<p align="center">
-<img src="https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExY2M2d212aDMzdXhiNWZ1MzZxZGdkenZiaDk2NGs0bDZoZ3FzbzgyNCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/Hu1EWP7aKFJKKTuIYF/giphy.gif" width="40%" />
-</p
-  
----
-
-## 🚀 Future Improvements
-
-- Add Customer module  
-- Add policy purchase flow  
-- Add frontend (React dashboard)  
-- Add logging + monitoring  
-- Docker deployment  
-
-<p align="center">
-<img src="https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExdnNqeXVsdmYzaG02ZXN1dnF4MzVqMmRhdWJoc3BsbjR0a240ZDBlNiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/qy1VAsXjWNR6ZD6HBG/giphy.gif" width="40%" />
-</p
-  
+```mermaid
+stateDiagram-v2
+    [*] --> UPLOADED
+    UPLOADED --> SUBMITTED
+    SUBMITTED --> UNDER_REVIEW
+    UNDER_REVIEW --> APPROVED
+    UNDER_REVIEW --> REJECTED
+    APPROVED --> [*]
+    REJECTED --> [*]
+```
 
 ---
 
-## 💭 Final Thoughts
+#  Authentication Flow (JWT Security)
 
-This project helped me understand real-world backend architecture beyond basic Spring Boot applications.
+```mermaid
+sequenceDiagram
+    participant User
+    participant Gateway
+    participant AuthService
+    participant ClaimsService
 
-It was a big step in my learning journey.
+    User->>AuthService: Login Request
+    AuthService->>User: JWT Token Generated
 
-<p align="center">
-<img src="https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExOXYzbWRnOXV3OTR1ZDQ3bGIxc2s1dnl6OGs1ZGl2eDltdHkwcnl5dCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/kRUvGywYREgS3JYnib/giphy.gif" width="40%" />
-</p
+    User->>Gateway: Request + JWT Token
+    Gateway->>AuthService: Validate Token
+    AuthService-->>Gateway: Valid
+
+    Gateway->>ClaimsService: Forward Request
+    ClaimsService-->>User: Response
+```
+
 ---
 
+#  Roles in System
 
+##  Customer 
+- Login & receive JWT token
+- Can Purchase Policy
+- View the policy 
+- Upload claim documents (PDF/Image)  
+- Track claim status  
 
-<p align="center">
-Thanks for checking this project 
-</p>
+##  Admin
+- Create Policy
+- Delete Policy
+- View the Policy
+- Approve / Reject claims  
+- Monitor system activity  
+
+---
+
+#  Tech Stack
+
+-  Java 21  
+-  Spring Boot  
+-  Spring Security + JWT  
+-  Spring Cloud Gateway  
+-  Eureka Service Discovery  
+-  MySQL  
+-  Maven  
+-  Swagger API Docs  
+-  Postman Testing  
+
+---
+
+#  Microservices Structure
+
+```bash
+SmartSure-Insurance/
+│
+├── api-gateway
+├── auth-service
+├── policy-service
+├── claims-service
+├── eureka-server
+```
+
+---
+
+#  API Endpoints
+
+##  Auth Service
+- POST `/auth/register`
+- POST `/auth/login`
+
+##  Policy Service
+- POST `/policies`
+- GET `/policies`
+- GET `/policies/{id}`
+- DELETE `/policies/{id}`
+
+##  Claims Service
+- POST `/api/claims/upload`
+- POST `/api/claims/initiate`
+- GET `/api/claims/status/{id}`
+- GET `/api/claims`
+- PUT `/api/claims/admin/review/{id}`
+
+---
+
+#  File Upload System
+
+- Supports PDF & Image uploads  
+- Stored in local file system (`uploads/`)  
+- Linked with claim records in DB  
+- Used during claim submission lifecycle  
+
+---
+
+#  Testing Strategy
+
+## ✔ Swagger UI
+- API visualization & testing
+
+## ✔ Postman
+- End-to-end microservice testing  
+- JWT authentication validation  
+- File upload (multipart) testing  
+- Full claim workflow testing  
+
+---
+
+#  End-to-End System Flow
+
+```mermaid
+flowchart LR
+
+A[Login] --> B[JWT Token]
+B --> C[API Gateway]
+C --> D[Upload Claim Document]
+D --> E[Claim Submitted]
+E --> F[Admin Review]
+F --> G{Decision}
+G --> H[Approved]
+G --> I[Rejected]
+H --> J[Report Generated]
+I --> J
+```
+
+---
+
+#  Key Challenges Solved
+
+- JWT authentication across microservices  
+- API Gateway routing & filter chain issues  
+- Eureka service registration & discovery  
+- File upload handling in distributed system  
+- End-to-end workflow consistency  
+
+---
+
+#  Future Enhancements
+
+-  React-based frontend dashboard  
+-  Email notifications (claim updates)  
+-  Docker containerization  
+-  Logging & monitoring system  
+-  Cloud deployment (AWS / Render)  
+
+---
+
+#  What This Project Demonstrates
+
+- Microservices architecture design  
+- Secure authentication (JWT)  
+- Real-world workflow simulation  
+- Distributed system communication  
+- Backend system design thinking  
+
+---
+
+#  Final Note
+
+This project is a **production-style backend simulation** designed to understand how scalable enterprise systems are built using microservices architecture.
+
+It reflects real-world backend engineering concepts used in modern companies.
+
+---
