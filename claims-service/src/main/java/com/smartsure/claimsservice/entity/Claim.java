@@ -29,4 +29,8 @@ public class Claim {
     private String status; // PENDING, APPROVED, REJECTED
 
     private LocalDate claimDate;
+
+    private String documentPath;
+
+    private String createdBy;
 }

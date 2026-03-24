@@ -8,18 +8,22 @@ spring:
   cloud:
     gateway:
       routes:
+
+        # AUTH SERVICE (PUBLIC)
         - id: auth-service
           uri: lb://AUTH-SERVICE
           predicates:
             - Path=/api/auth/**
 
+        # POLICY SERVICE (SECURED)
         - id: policy-service
           uri: lb://POLICY-SERVICE
           predicates:
             - Path=/api/policies/**
           filters:
-            - JwtAuthenticationFilter   # 🔥 ADD THIS LINE
+            - JwtAuthenticationFilter
 
+        # CLAIMS SERVICE (SECURED)
         - id: claims-service
           uri: lb://CLAIMS-SERVICE
           predicates:
@@ -27,9 +31,17 @@ spring:
           filters:
             - JwtAuthenticationFilter
 
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins: "*"
+            allowedMethods: "*"
+            allowedHeaders: "*"
+
 eureka:
   client:
-    register-with-eureka: false
+    register-with-eureka: true
+    fetch-registry: true
     service-url:
       defaultZone: http://localhost:8761/eureka
 
