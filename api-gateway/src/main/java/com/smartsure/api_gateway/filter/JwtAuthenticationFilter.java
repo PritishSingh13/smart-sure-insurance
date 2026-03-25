@@ -44,12 +44,12 @@ public class JwtAuthenticationFilter extends AbstractGatewayFilterFactory<JwtAut
 
             String path = exchange.getRequest().getURI().getPath();
 
-            // PUBLIC ROUTESS
+            // PUBLIC ROUTES
             if (path.startsWith("/api/auth")) {
                 return chain.filter(exchange);
             }
 
-            // CHECK AUTH HEADERR
+            // CHECK AUTH HEADER
             if (!exchange.getRequest().getHeaders().containsKey(HttpHeaders.AUTHORIZATION)) {
                 exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
                 return exchange.getResponse().setComplete();
