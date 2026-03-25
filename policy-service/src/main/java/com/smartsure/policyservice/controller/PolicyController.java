@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/policies")
 public class PolicyController {
 
     private final PolicyService policyService;
@@ -17,89 +16,65 @@ public class PolicyController {
         this.policyService = policyService;
     }
 
-    // ================================
-    // ADMIN: CREATE POLICY
-    // ================================
-    @PostMapping
+    // ================= ADMIN =================
+
+    @PostMapping("/api/admin/policies")
     public Policy createPolicy(
             @RequestBody Policy policy,
-            @RequestHeader(value = "X-User-Role", required = false) String role
+            @RequestHeader("X-User-Role") String role
     ) {
-
-        if (role == null || !role.equalsIgnoreCase("ADMIN")) {
-            throw new RuntimeException("Access Denied: ADMIN only");
+        if (!role.equalsIgnoreCase("ADMIN")) {
+            throw new RuntimeException("ADMIN only");
         }
-
         return policyService.createPolicy(policy);
     }
 
-    // ================================
-    // ADMIN: UPDATE POLICY
-    // ================================
-    @PutMapping("/{id}")
+    @PutMapping("/api/admin/policies/{id}")
     public Policy updatePolicy(
             @PathVariable Long id,
             @RequestBody Policy policy,
-            @RequestHeader(value = "X-User-Role", required = false) String role
+            @RequestHeader("X-User-Role") String role
     ) {
-
-        if (role == null || !role.equalsIgnoreCase("ADMIN")) {
-            throw new RuntimeException("Access Denied: ADMIN only");
+        if (!role.equalsIgnoreCase("ADMIN")) {
+            throw new RuntimeException("ADMIN only");
         }
-
         return policyService.updatePolicy(id, policy);
     }
 
-    // ================================
-    // GET ALL POLICIES (PUBLIC)
-    // ================================
-    @GetMapping
+    @DeleteMapping("/api/admin/policies/{id}")
+    public String deletePolicy(
+            @PathVariable Long id,
+            @RequestHeader("X-User-Role") String role
+    ) {
+        if (!role.equalsIgnoreCase("ADMIN")) {
+            throw new RuntimeException("ADMIN only");
+        }
+        return policyService.deletePolicy(id);
+    }
+
+    // ================= PUBLIC =================
+
+    @GetMapping("/api/policies")
     public List<Policy> getAllPolicies() {
         return policyService.getAllPolicies();
     }
 
-    // ================================
-    // GET POLICY BY ID (PUBLIC)
-    // ================================
-    @GetMapping("/{id}")
+    @GetMapping("/api/policies/{id}")
     public Policy getPolicyById(@PathVariable Long id) {
         return policyService.getPolicyById(id);
     }
 
-    // ================================
-    // CUSTOMER: PURCHASE POLICY
-    // ================================
-    @PostMapping("/purchase")
+    // ================= CUSTOMER =================
+
+    @PostMapping("/api/policies/purchase")
     public String purchasePolicy(
             @RequestBody PurchaseRequest request,
-            @RequestHeader(value = "X-User-Email", required = false) String userEmail,
-            @RequestHeader(value = "X-User-Role", required = false) String role
+            @RequestHeader("X-User-Email") String email,
+            @RequestHeader("X-User-Role") String role
     ) {
-
-        if (role == null || !role.equalsIgnoreCase("CUSTOMER")) {
-            throw new RuntimeException("Only CUSTOMER can purchase policy");
+        if (!role.equalsIgnoreCase("CUSTOMER")) {
+            throw new RuntimeException("CUSTOMER only");
         }
-
-        if (userEmail == null) {
-            throw new RuntimeException("User email missing from request");
-        }
-
-        return policyService.purchasePolicy(request.getPolicyId(), userEmail);
-    }
-
-    // ================================
-    // ADMIN: DELETE POLICY
-    // ================================
-    @DeleteMapping("/{id}")
-    public String deletePolicy(
-            @PathVariable Long id,
-            @RequestHeader(value = "X-User-Role", required = false) String role
-    ) {
-
-        if (role == null || !role.equalsIgnoreCase("ADMIN")) {
-            throw new RuntimeException("Access Denied: ADMIN only");
-        }
-
-        return policyService.deletePolicy(id);
+        return policyService.purchasePolicy(request.getPolicyId(), email);
     }
 }

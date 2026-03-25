@@ -17,12 +17,16 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
+
+                        // ✅ ALLOW ADMIN + POLICY ROUTES
                         .requestMatchers(
+                                "/api/admin/**",
+                                "/api/policies/**",
                                 "/v3/api-docs/**",
                                 "/swagger-ui/**",
-                                "/swagger-ui.html",
-                                "/api/policies/**"
+                                "/swagger-ui.html"
                         ).permitAll()
+
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session ->
