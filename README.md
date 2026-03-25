@@ -78,6 +78,10 @@ S --> E
 C --> E
 AD --> E
 G --> E
+
+
+
+
 ```
 
 ---
@@ -115,6 +119,9 @@ sequenceDiagram
 
     Gateway->>ClaimsService: Forward Request
     ClaimsService-->>User: Response
+
+
+
 ```
 
 ---
@@ -169,6 +176,9 @@ SmartSure-Insurance/
 ├── claims-service
 ├── admin-service
 ├── eureka-server
+
+
+
 ```
 
 ---
