@@ -293,6 +293,33 @@ I --> J
 
 ---
 
+# 📄 License
+
+This project is developed as part of a **Capgemini Spring Boot Microservices Evaluation Program**.
+
+This repository is intended for **learning, academic submission, and demonstration purposes only**.
+
+You are free to:
+- View and understand the code  
+- Use it for learning and practice  
+- Reference it for building similar projects  
+
+You are NOT allowed to:
+- Copy and submit it as your own work in evaluations  
+- Use it for commercial purposes without permission  
+
+---
+
+# © Copyright
+
+© 2026 SmartSure Insurance System  
+
+Developed under **Capgemini Spring Boot Microservices Evaluation Program**.
+
+All rights reserved.
+
+---
+
 # Final Note
 
 This project is a **production-style backend simulation** designed to understand how scalable enterprise systems are built using microservices architecture.
