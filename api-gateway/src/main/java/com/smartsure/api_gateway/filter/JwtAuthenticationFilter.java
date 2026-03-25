@@ -25,16 +25,10 @@ public class JwtAuthenticationFilter extends AbstractGatewayFilterFactory<JwtAut
 
     public static class Config {}
 
-    // =========================
-    // SIGNING KEYY
-    // =========================
     private Key getSignKey() {
         return Keys.hmacShaKeyFor(secret.getBytes());
     }
 
-    // =========================
-    // VALIDATE TOKEN
-    // =========================
     private Claims extractClaims(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(getSignKey())
@@ -50,16 +44,12 @@ public class JwtAuthenticationFilter extends AbstractGatewayFilterFactory<JwtAut
 
             String path = exchange.getRequest().getURI().getPath();
 
-            // =========================
             // PUBLIC ROUTES
-            // =========================
             if (path.startsWith("/api/auth")) {
                 return chain.filter(exchange);
             }
 
-            // =========================
             // CHECK AUTH HEADER
-            // =========================
             if (!exchange.getRequest().getHeaders().containsKey(HttpHeaders.AUTHORIZATION)) {
                 exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
                 return exchange.getResponse().setComplete();
@@ -79,24 +69,16 @@ public class JwtAuthenticationFilter extends AbstractGatewayFilterFactory<JwtAut
             try {
                 Claims claims = extractClaims(token);
 
-                // =========================
-                // EXTRACT USER INFO
-                // =========================
                 String email = claims.getSubject();
                 String role = claims.get("role", String.class);
 
-                if (email == null || role == null) {
-                    exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
-                    return exchange.getResponse().setComplete();
-                }
-
-                // =========================
-                // FORWARD HEADERS TO MICROSERVICES
-                // =========================
+                // 🔥 FIX: SEND BOTH HEADER TYPES (COMPATIBILITY)
                 ServerHttpRequest modifiedRequest = exchange.getRequest()
                         .mutate()
                         .header("X-Auth-User", email)
                         .header("X-Auth-Role", role)
+                        .header("X-User-Email", email)   // ✅ FIX
+                        .header("X-User-Role", role)     // ✅ FIX
                         .build();
 
                 return chain.filter(exchange.mutate().request(modifiedRequest).build());

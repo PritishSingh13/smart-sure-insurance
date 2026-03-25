@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/claims")
 public class ClaimController {
 
     private final ClaimService claimService;
@@ -19,9 +18,10 @@ public class ClaimController {
     }
 
     // =========================
-    // USER: UPLOAD CLAIM (WITH FILE)
+    // USER APIs
     // =========================
-    @PostMapping("/upload")
+
+    @PostMapping("/api/claims/upload")
     public Claim uploadClaimWithFile(
             @RequestParam("file") MultipartFile file,
             @RequestParam("policyNumber") String policyNumber,
@@ -34,46 +34,55 @@ public class ClaimController {
                 file, policyNumber, claimantName, claimType, claimAmount, userEmail);
     }
 
-    // =========================
-    // USER: INITIATE CLAIM
-    // =========================
-    @PostMapping("/initiate")
+    @PostMapping("/api/claims/initiate")
     public Claim initiateClaim(@RequestParam Long claimId,
                                @RequestHeader("X-Auth-User") String userEmail) {
         return claimService.initiateClaim(claimId, userEmail);
     }
 
-    // =========================
-    // USER: GET STATUS
-    // =========================
-    @GetMapping("/status/{claimId}")
+    @GetMapping("/api/claims/status/{claimId}")
     public String getStatus(@PathVariable Long claimId,
                             @RequestHeader("X-Auth-User") String userEmail) {
         return claimService.getClaimStatus(claimId, userEmail);
     }
 
     // =========================
-    // ADMIN: REVIEW CLAIM
+    // ADMIN APIs (FOR GATEWAY)
     // =========================
-    @PutMapping("/admin/review/{claimId}")
+
+    @PutMapping("/api/admin/claims/{claimId}/review")
     public String reviewClaim(@PathVariable Long claimId,
                               @RequestParam String status) {
         return claimService.reviewClaim(claimId, status);
     }
 
-    // =========================
-    // ADMIN: GET ALL CLAIMS
-    // =========================
-    @GetMapping
-    public List<Claim> getAll() {
+    @GetMapping("/api/admin/claims")
+    public List<Claim> getAllClaims() {
         return claimService.getAllClaims();
     }
 
-    // =========================
-    // ADMIN: REPORTS
-    // =========================
-    @GetMapping("/admin/reports")
+    @GetMapping("/api/admin/reports")
     public Map<String, Long> getReports() {
+        return claimService.getReportData();
+    }
+
+    // =========================
+    // INTERNAL APIs (FOR FEIGN)
+    // =========================
+
+    @PutMapping("/internal/claims/review/{claimId}")
+    public String reviewInternal(@PathVariable Long claimId,
+                                 @RequestParam String status) {
+        return claimService.reviewClaim(claimId, status);
+    }
+
+    @GetMapping("/internal/claims")
+    public List<Claim> getAllInternal() {
+        return claimService.getAllClaims();
+    }
+
+    @GetMapping("/internal/claims/reports")
+    public Map<String, Long> getReportsInternal() {
         return claimService.getReportData();
     }
 }

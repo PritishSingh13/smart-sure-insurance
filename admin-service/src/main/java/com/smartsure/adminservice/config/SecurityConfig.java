@@ -1,4 +1,4 @@
-package com.smartsure.claimsservice.config;
+package com.smartsure.adminservice.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,10 +14,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
-
                 .csrf(csrf -> csrf.disable())
-
-
                 .authorizeHttpRequests(auth -> auth
                         .anyRequest().permitAll()
                 );
