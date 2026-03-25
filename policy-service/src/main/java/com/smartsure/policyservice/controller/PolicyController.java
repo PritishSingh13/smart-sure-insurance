@@ -52,7 +52,7 @@ public class PolicyController {
         return policyService.deletePolicy(id);
     }
 
-    // ================= PUBLIC =================
+    // ================ PUBLIC ================
 
     @GetMapping("/api/policies")
     public List<Policy> getAllPolicies() {
