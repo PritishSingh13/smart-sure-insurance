@@ -1,5 +1,3 @@
-
-
 <h1 align="center" style="font-size:40px;">
  SmartSure Insurance Microservices System 
 </h1>
@@ -13,10 +11,9 @@
   <img src="https://img.shields.io/badge/MySQL-Database-blue?style=for-the-badge"/>
 </p>
 
-
 ---
 
-#  Project Overview
+# Project Overview
 
 <p align="justify">
 
@@ -28,13 +25,11 @@ Administrative users manage insurance products, verify claim documentation, appr
 
 The system is built using Spring Boot microservices, with Spring Cloud Gateway acting as the API gateway for routing requests to backend services.
 
-Each microservice maintains its own database and communicates with other services through REST APIs or OpenFeign clients.
+Each microservice maintains its own database and communicates with other services through REST APIs and OpenFeign clients.
 
 A frontend layer (React or Angular) can be integrated for user interaction and visualization.
 
 </p>
-
-
 
 <p align="center">
   <img src="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExcmpweXg2emk4c2J6bjBpcmZ1NXMwc2Y2ZHIzZWR5dzg2eHZkaWFtNyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/K3htdZ1XuVWVD5DZDZ/giphy.gif" width="420"/>
@@ -42,7 +37,7 @@ A frontend layer (React or Angular) can be integrated for user interaction and v
 
 ---
 
-##  System Architecture (High Level Design)
+## System Architecture (High Level Design)
 
 ```mermaid
 graph TD
@@ -55,6 +50,7 @@ G[API Gateway Spring Cloud Gateway]
 A[Auth Service JWT]
 S[Policy Service]
 C[Claims Service]
+AD[Admin Service OpenFeign]
 
 E[Eureka Server]
 
@@ -67,6 +63,9 @@ P --> G
 G --> A
 G --> S
 G --> C
+G --> AD
+
+AD --> C
 
 A --> DB
 S --> DB
@@ -77,12 +76,13 @@ C --> FS
 A --> E
 S --> E
 C --> E
+AD --> E
 G --> E
 ```
 
 ---
 
-#  Claim Lifecycle (Business Flow)
+# Claim Lifecycle (Business Flow)
 
 ```mermaid
 stateDiagram-v2
@@ -91,13 +91,13 @@ stateDiagram-v2
     SUBMITTED --> UNDER_REVIEW
     UNDER_REVIEW --> APPROVED
     UNDER_REVIEW --> REJECTED
-    APPROVED --> [*]
-    REJECTED --> [*]
+    APPROVED --> CLOSED
+    REJECTED --> CLOSED
 ```
 
 ---
 
-#  Authentication Flow (JWT Security)
+# Authentication Flow (JWT Security)
 
 ```mermaid
 sequenceDiagram
@@ -119,39 +119,46 @@ sequenceDiagram
 
 ---
 
-#  Roles in System
+# Roles in System
 
-##  Customer 
-- Login & receive JWT token
-- Can Purchase Policy
-- View the policy 
-- Upload claim documents (PDF/Image)  
-- Track claim status  
+## Customer
 
-##  Admin
-- Create Policy
-- Delete Policy
-- View the Policy
-- Approve / Reject claims  
-- Monitor system activity  
+* Login & receive JWT token
+* Can Purchase Policy
+* View the policy
+* Upload claim documents (PDF/Image)
+* Initiate claims
+* Track claim status
 
----
+## Admin
 
-#  Tech Stack
-
--  Java 21  
--  Spring Boot  
--  Spring Security + JWT  
--  Spring Cloud Gateway  
--  Eureka Service Discovery  
--  MySQL  
--  Maven  
--  Swagger API Docs  
--  Postman Testing  
+* Create Policy
+* Update Policy
+* Delete Policy
+* View policies
+* Review claims
+* Approve / Reject claims
+* Generate reports
+* Monitor system activity
 
 ---
 
-#  Microservices Structure
+# Tech Stack
+
+* Java 21
+* Spring Boot
+* Spring Security + JWT
+* Spring Cloud Gateway
+* Eureka Service Discovery
+* OpenFeign
+* MySQL
+* Maven
+* Swagger API Docs
+* Postman Testing
+
+---
+
+# Microservices Structure
 
 ```bash
 SmartSure-Insurance/
@@ -160,55 +167,83 @@ SmartSure-Insurance/
 ├── auth-service
 ├── policy-service
 ├── claims-service
+├── admin-service
 ├── eureka-server
 ```
 
 ---
 
-#  API Endpoints
+# API Endpoints
 
-##  Auth Service
-- POST `/auth/register`
-- POST `/auth/login`
+## Auth Service
 
-##  Policy Service
-- POST `/policies`
-- GET `/policies`
-- GET `/policies/{id}`
-- DELETE `/policies/{id}`
+* POST `/api/auth/register`
+* POST `/api/auth/login`
 
-##  Claims Service
-- POST `/api/claims/upload`
-- POST `/api/claims/initiate`
-- GET `/api/claims/status/{id}`
-- GET `/api/claims`
-- PUT `/api/claims/admin/review/{id}`
+## Policy Service
+
+### Public
+
+* GET `/api/policies`
+* GET `/api/policies/{id}`
+
+### Customer
+
+* POST `/api/policies/purchase`
+
+### Admin
+
+* POST `/api/admin/policies`
+* PUT `/api/admin/policies/{id}`
+* DELETE `/api/admin/policies/{id}`
+
+## Claims Service
+
+### Customer
+
+* POST `/api/claims/upload`
+* POST `/api/claims/initiate`
+* GET `/api/claims/status/{id}`
+
+### Internal (Used via OpenFeign)
+
+* PUT `/api/claims/internal/claims/review/{id}`
+* GET `/api/claims/internal/claims`
+* GET `/api/claims/internal/claims/reports`
+
+## Admin Service
+
+* PUT `/api/admin/claims/{id}/review`
+* GET `/api/admin/claims`
+* GET `/api/admin/reports`
 
 ---
 
-#  File Upload System
+# File Upload System
 
-- Supports PDF & Image uploads  
-- Stored in local file system (`uploads/`)  
-- Linked with claim records in DB  
-- Used during claim submission lifecycle  
+* Supports PDF & Image uploads
+* Stored in local file system (`uploads/`)
+* Linked with claim records in DB
+* Used during claim submission lifecycle
 
 ---
 
-#  Testing Strategy
+# Testing Strategy
 
 ## ✔ Swagger UI
-- API visualization & testing
+
+* API visualization & testing
 
 ## ✔ Postman
-- End-to-end microservice testing  
-- JWT authentication validation  
-- File upload (multipart) testing  
-- Full claim workflow testing  
+
+* End-to-end microservice testing
+* JWT authentication validation
+* File upload (multipart) testing
+* Full claim workflow testing
 
 ---
 
-#  End-to-End System Flow
+# End-to-End System Flow
 
 ```mermaid
 flowchart LR
@@ -217,7 +252,7 @@ A[Login] --> B[JWT Token]
 B --> C[API Gateway]
 C --> D[Upload Claim Document]
 D --> E[Claim Submitted]
-E --> F[Admin Review]
+E --> F[Admin Service Review]
 F --> G{Decision}
 G --> H[Approved]
 G --> I[Rejected]
@@ -227,40 +262,39 @@ I --> J
 
 ---
 
-#  Key Challenges Solved
+# Key Challenges Solved
 
-- JWT authentication across microservices  
-- API Gateway routing & filter chain issues  
-- Eureka service registration & discovery  
-- File upload handling in distributed system  
-- End-to-end workflow consistency  
-
----
-
-#  Future Enhancements
-
--  React-based frontend dashboard  
--  Email notifications (claim updates)  
--  Docker containerization  
--  Logging & monitoring system  
--  Cloud deployment (AWS / Render)  
+* JWT authentication across microservices
+* API Gateway routing & filter chain issues
+* Eureka service registration & discovery
+* OpenFeign service-to-service communication
+* File upload handling in distributed system
+* End-to-end workflow consistency
 
 ---
 
-#  What This Project Demonstrates
+# Future Enhancements
 
-- Microservices architecture design  
-- Secure authentication (JWT)  
-- Real-world workflow simulation  
-- Distributed system communication  
-- Backend system design thinking  
+* React-based frontend dashboard
+* Email notifications (claim updates)
+* Docker containerization
+* Logging & monitoring system
+* Cloud deployment (AWS / Render)
 
 ---
 
-#  Final Note
+# What This Project Demonstrates
+
+* Microservices architecture design
+* Secure authentication (JWT)
+* Real-world workflow simulation
+* Distributed system communication
+* Backend system design thinking
+
+---
+
+# Final Note
 
 This project is a **production-style backend simulation** designed to understand how scalable enterprise systems are built using microservices architecture.
 
 It reflects real-world backend engineering concepts used in modern companies.
-
----
