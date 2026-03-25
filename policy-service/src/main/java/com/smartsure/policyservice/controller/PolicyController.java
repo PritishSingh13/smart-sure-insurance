@@ -64,7 +64,7 @@ public class PolicyController {
         return policyService.getPolicyById(id);
     }
 
-    // ================ CUSTOMER =================
+    // ================ CUSTOMER ================
 
     @PostMapping("/api/policies/purchase")
     public String purchasePolicy(
