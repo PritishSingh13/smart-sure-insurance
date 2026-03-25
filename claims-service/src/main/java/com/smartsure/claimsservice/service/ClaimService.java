@@ -65,7 +65,7 @@ public class ClaimService {
     }
 
     // =========================
-    // INITIATE CLAIM
+    // INITIATE CLAIMM
     // =========================
     public Claim initiateClaim(Long id, String userEmail) {
         Claim claim = claimRepository.findById(id)
