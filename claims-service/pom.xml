@@ -77,6 +77,13 @@
 			<scope>test</scope>
 		</dependency>
 
+		<!--Test for security testing-->
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+
 	</dependencies>
 
 	<dependencyManagement>

@@ -30,7 +30,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
         String path = request.getRequestURI();
 
-        // 🔓 Skip auth endpoints
+        //  Skip auth endpoints
         if (path.startsWith("/api/auth/")) {
             filterChain.doFilter(request, response);
             return;
@@ -42,7 +42,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         String email = null;
         String role = null;
 
-        // ✅ Extract token
+        //  Extract token
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             token = authHeader.substring(7);
 
@@ -54,7 +54,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             }
         }
 
-        // ✅ Set authentication with ROLE
+        // Set authentication with ROLE
         if (email != null && role != null &&
                 SecurityContextHolder.getContext().getAuthentication() == null) {
 
@@ -63,7 +63,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                             email,
                             null,
                             List.of(new SimpleGrantedAuthority("ROLE_" + role.trim().toUpperCase()))
-                    );// 🔥 IMPORTANT
+                    );//  IMPORTANT
 
 
             SecurityContextHolder.getContext().setAuthentication(authToken);
