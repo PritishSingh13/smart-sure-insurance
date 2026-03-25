@@ -39,7 +39,7 @@ public class AuthService {
         user.setPhone(request.getPhone());
         user.setAddress(request.getAddress());
 
-        // 🔥 STEP 1 FIX: CLEAN ROLE HANDLING
+
         String role = (request.getRole() == null || request.getRole().isEmpty())
                 ? "CUSTOMER"
                 : request.getRole().trim().toUpperCase();
@@ -61,7 +61,7 @@ public class AuthService {
             throw new RuntimeException("Invalid credentials");
         }
 
-        // 🔥 STEP 1 FIX: CLEAN ROLE BEFORE JWT
+
         String role = user.getRole().trim().toUpperCase();
 
         String token = jwtUtil.generateToken(user.getEmail(), role);
