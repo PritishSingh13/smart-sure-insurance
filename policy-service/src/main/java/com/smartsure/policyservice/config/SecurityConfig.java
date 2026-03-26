@@ -18,7 +18,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
 
-                        // ✅ ALLOW ADMIN + POLICY ROUTES
+                        //  ALLOW ADMIN + POLICY ROUTES
                         .requestMatchers(
                                 "/api/admin/**",
                                 "/api/policies/**",

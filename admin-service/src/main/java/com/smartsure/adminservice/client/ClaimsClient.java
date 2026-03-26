@@ -1,5 +1,6 @@
 package com.smartsure.adminservice.client;
 
+import com.smartsure.adminservice.dto.ClaimDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,7 +17,7 @@ public interface ClaimsClient {
 
     // GET ALL CLAIMS
     @GetMapping("/internal/claims")
-    List<Object> getAllClaims();
+    List<ClaimDto> getAllClaims();
 
     // GET REPORTS
     @GetMapping("/internal/claims/reports")

@@ -1,11 +1,13 @@
 package com.smartsure.policyservice.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.smartsure.policyservice.model.Policy;
 import com.smartsure.policyservice.model.PolicyPurchase;
 import com.smartsure.policyservice.repository.PolicyRepository;
 import com.smartsure.policyservice.repository.PolicyPurchaseRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -21,14 +23,33 @@ public class PolicyService {
     }
 
     // =========================
-    // CREATE POLICY
+    // CREATE POLICY (SINGLE + MULTIPLE SUPPORT)
     // =========================
-    public Policy createPolicy(Policy policy) {
+    public Object createPolicy(Object requestBody) {
+
+        ObjectMapper mapper = new ObjectMapper();
+
+        // If ARRAY → multiple policies
+        if (requestBody instanceof List) {
+
+            List<?> rawList = (List<?>) requestBody;
+            List<Policy> savedPolicies = new ArrayList<>();
+
+            for (Object obj : rawList) {
+                Policy policy = mapper.convertValue(obj, Policy.class);
+                savedPolicies.add(policyRepository.save(policy));
+            }
+
+            return savedPolicies;
+        }
+
+        // If SINGLE → one policy
+        Policy policy = mapper.convertValue(requestBody, Policy.class);
         return policyRepository.save(policy);
     }
 
     // =========================
-    // UPDATE POLICY (NEW)
+    // UPDATE POLICY
     // =========================
     public Policy updatePolicy(Long id, Policy updatedPolicy) {
 
@@ -59,7 +80,7 @@ public class PolicyService {
     }
 
     // =========================
-    // PURCHASE POLICY
+    // PURCHASE POLICY (UPDATED FLOW)
     // =========================
     public String purchasePolicy(Long policyId, String userEmail) {
 
@@ -72,7 +93,11 @@ public class PolicyService {
 
         purchaseRepository.save(purchase);
 
-        return "Policy purchased successfully";
+        return "Policy Purchased Successfully!\n" +
+                "Policy ID: " + policy.getId() + "\n" +
+                "Policy Name: " + policy.getPolicyName() + "\n" +
+                "User Email: " + userEmail + "\n" +
+                "👉 Use this Policy ID for Claims: " + policy.getId();
     }
 
     // =========================

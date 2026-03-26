@@ -10,7 +10,7 @@ public class TestController {
     @GetMapping("/admin")
     @PreAuthorize("hasRole('ADMIN')")
     public String admin() {
-        return "Admin access granted 🔥";
+        return "Admin access granted ";
     }
 
 

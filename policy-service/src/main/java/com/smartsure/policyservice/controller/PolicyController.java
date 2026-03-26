@@ -19,14 +19,16 @@ public class PolicyController {
     // ================= ADMIN =================
 
     @PostMapping("/api/admin/policies")
-    public Policy createPolicy(
-            @RequestBody Policy policy,
+    public Object createPolicy(
+            @RequestBody Object input,
             @RequestHeader("X-User-Role") String role
     ) {
         if (!role.equalsIgnoreCase("ADMIN")) {
             throw new RuntimeException("ADMIN only");
         }
-        return policyService.createPolicy(policy);
+
+        // 🔥 Directly pass to service (handles both single + multiple)
+        return policyService.createPolicy(input);
     }
 
     @PutMapping("/api/admin/policies/{id}")
@@ -75,6 +77,7 @@ public class PolicyController {
         if (!role.equalsIgnoreCase("CUSTOMER")) {
             throw new RuntimeException("CUSTOMER only");
         }
+
         return policyService.purchasePolicy(request.getPolicyId(), email);
     }
 }
