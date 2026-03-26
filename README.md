@@ -1,61 +1,60 @@
 <h1 align="center" style="font-size:40px;">
- SmartSure Insurance Microservices System 
+ 🛡️ SmartSure Insurance Microservices System 
 </h1>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Java-21-blue?style=for-the-badge"/>
-  <img src="https://img.shields.io/badge/SpringBoot-Microservices-brightgreen?style=for-the-badge"/>
-  <img src="https://img.shields.io/badge/SpringCloud-Gateway-red?style=for-the-badge"/>
-  <img src="https://img.shields.io/badge/JWT-Security-orange?style=for-the-badge"/>
-  <img src="https://img.shields.io/badge/Eureka-Service%20Discovery-purple?style=for-the-badge"/>
-  <img src="https://img.shields.io/badge/MySQL-Database-blue?style=for-the-badge"/>
+  <img src="https://img.shields.io/badge/Java-21-blue?style=for-the-badge&logo=java&logoColor=white"/>
+  <img src="https://img.shields.io/badge/SpringBoot-3.x-brightgreen?style=for-the-badge&logo=springboot&logoColor=white"/>
+  <img src="https://img.shields.io/badge/SpringCloud-Gateway-red?style=for-the-badge&logo=spring&logoColor=white"/>
+  <img src="https://img.shields.io/badge/JWT-Security-orange?style=for-the-badge&logo=jsonwebtokens&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Eureka-Discovery-purple?style=for-the-badge&logo=spring&logoColor=white"/>
+  <img src="https://img.shields.io/badge/MySQL-Database-blue?style=for-the-badge&logo=mysql&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Zipkin-Tracing-yellow?style=for-the-badge"/>
+  <img src="https://img.shields.io/badge/JUnit5-Testing-success?style=for-the-badge&logo=junit5&logoColor=white"/>
 </p>
 
 ----
 
-# Project Overview
+# 📖 Project Overview
 
 <p align="justify">
 
-SmartSure Insurance Management System is a microservices-based backend platform designed to digitize the complete insurance lifecycle.
+**SmartSure Insurance Management System** is an advanced, enterprise-grade backend platform designed to completely digitize the insurance lifecycle using a scalable microservices architecture.
 
-Customers can register, purchase insurance policies, calculate premiums, upload claim documents, and initiate insurance claims through secure REST APIs.
+Customers can register, purchase customized insurance policies, calculate dynamic premiums, upload physical claim documents securely, and initiate insurance claims through secure REST APIs. 
 
-Administrative users manage insurance products, verify claim documentation, approve or reject claims, and generate operational reports.
+Administrative users can manage active insurance products, verify physical claim documentation, approve or reject lifecycle claims, and generate operational analytics reports.
 
-The system is built using Spring Boot microservices, with Spring Cloud Gateway acting as the API gateway for routing requests to backend services.
-
-Each microservice maintains its own database and communicates with other services through REST APIs and OpenFeign clients.
-
-A frontend layer (React or Angular) can be integrated for user interaction and visualization.
+The ecosystem is built upon independent **Spring Boot 3** microservices, centrally orchestrated by **Spring Cloud Gateway** for strict API routing. Each module maintains isolated state structures and local databases, communicating asynchronously via REST APIs and **OpenFeign** clients, while maintaining robust **Micrometer & Zipkin** distributed tracing.
 
 </p>
 
 <p align="center">
-  <img src="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExcmpweXg2emk4c2J6bjBpcmZ1NXMwc2Y2ZHIzZWR5dzg2eHZkaWFtNyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/K3htdZ1XuVWVD5DZDZ/giphy.gif" width="420"/>
+  <img src="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExcmpweXg2emk4c2J6bjBpcmZ1NXMwc2Y2ZHIzZWR5dzg2eHZkaWFtNyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/K3htdZ1XuVWVD5DZDZ/giphy.gif" width="420" style="border-radius: 10px;"/>
 </p>
 
 ---
 
-## System Architecture (High Level Design)
+## 🏛️ System Architecture (High Level Design)
 
 ```mermaid
 graph TD
 
-U[User Customer/Admin]
-P[Postman Client]
+U[User / Admin]
+P[API Client]
 
-G[API Gateway Spring Cloud Gateway]
+G[Spring Cloud Gateway<br>Gateway Filter]
 
-A[Auth Service JWT]
-S[Policy Service]
-C[Claims Service]
-AD[Admin Service OpenFeign]
+A[Auth Service<br>JWT & Identity]
+S[Policy Service<br>Purchase & CRUD]
+C[Claims Service<br>Uploads & Review]
+AD[Admin Service<br>OpenFeign Facade]
 
-E[Eureka Server]
+E[Netflix Eureka<br>Service Discovery]
+Z[Zipkin Server<br>Distributed Tracing]
 
-DB[(MySQL Database)]
-FS[(File Storage uploads)]
+DB[(MySQL Relational DB)]
+FS[(Local File Storage)]
 
 U --> P
 P --> G
@@ -65,7 +64,8 @@ G --> S
 G --> C
 G --> AD
 
-AD --> C
+AD -->|Feign Client| C
+AD -->|Feign Client| S
 
 A --> DB
 S --> DB
@@ -73,26 +73,33 @@ C --> DB
 
 C --> FS
 
-A --> E
-S --> E
-C --> E
-AD --> E
-G --> E
+A -.-> E
+S -.-> E
+C -.-> E
+AD -.-> E
+G -.-> E
 
+G -.-> Z
+A -.-> Z
+S -.-> Z
+C -.-> Z
+AD -.-> Z
 
-
-
+classDef gateway fill:#ffcfdf,stroke:#ff9a9e,stroke-width:2px;
+class G gateway;
+classDef service fill:#d4fc79,stroke:#96e6a1,stroke-width:2px;
+class A,S,C,AD service;
 ```
 
 ---
 
-# Claim Lifecycle (Business Flow)
+# 🔄 Claim Lifecycle (Business Flow)
 
 ```mermaid
 stateDiagram-v2
     [*] --> UPLOADED
-    UPLOADED --> SUBMITTED
-    SUBMITTED --> UNDER_REVIEW
+    UPLOADED --> SUBMITTED : Proof Attached
+    SUBMITTED --> UNDER_REVIEW : Admin Assigned
     UNDER_REVIEW --> APPROVED
     UNDER_REVIEW --> REJECTED
     APPROVED --> CLOSED
@@ -101,7 +108,7 @@ stateDiagram-v2
 
 ---
 
-# Authentication Flow (JWT Security)
+# 🔐 Authentication Flow (JWT Security)
 
 ```mermaid
 sequenceDiagram
@@ -110,228 +117,167 @@ sequenceDiagram
     participant AuthService
     participant ClaimsService
 
-    User->>AuthService: Login Request
-    AuthService->>User: JWT Token Generated
+    User->>AuthService: Login Request (Credentials)
+    AuthService->>User: Signed JWT Token Generated
 
-    User->>Gateway: Request + JWT Token
-    Gateway->>AuthService: Validate Token
-    AuthService-->>Gateway: Valid
+    User->>Gateway: API Request + Bearer JWT
+    Gateway->>AuthService: Validate & Extract Claims
+    AuthService-->>Gateway: Validation Verified
 
-    Gateway->>ClaimsService: Forward Request
-    ClaimsService-->>User: Response
-
-
-
+    Gateway->>ClaimsService: Forward Authenticated Request
+    ClaimsService-->>User: Secure Response
 ```
 
 ---
 
-# Roles in System
+# 👥 Roles & Permissions
 
-## Customer
+## 🟢 Customer Focus
+* Secure Login & receive JWT validation tokens.
+* Execute policy purchases and bindings.
+* Interrogate personal policy statuses.
+* Upload physical claim validation documents `(multipart/form-data)`.
+* Initiate official claim processing routines.
+* Track lifecycle status of active claims in real-time.
 
-* Login & receive JWT token
-* Can Purchase Policy
-* View the policy
-* Upload claim documents (PDF/Image)
-* Initiate claims
-* Track claim status
-
-## Admin
-
-* Create Policy
-* Update Policy
-* Delete Policy
-* View policies
-* Review claims
-* Approve / Reject claims
-* Generate reports
-* Monitor system activity
+## 🔴 Administrative Focus
+* Create, update, and deprecate system Policies.
+* Review all active system claims and associated `uploads/` files.
+* Authoritatively Approve or Reject claims modifying their downstream state.
+* Aggregate and generate cross-service operational reports.
+* Override general customer operational boundaries securely.
 
 ---
 
-# Tech Stack
+# 🛠️ Tech Stack & Technologies
 
-* Java 21
-* Spring Boot
-* Spring Security + JWT
-* Spring Cloud Gateway
-* Eureka Service Discovery
-* OpenFeign
-* MySQL
-* Maven
-* Swagger API Docs
-* Postman Testing
+| Category | Technology |
+|---|---|
+| **Core Framework** | Java 21, Spring Boot 3.x |
+| **Microservices Cloud** | Spring Cloud Gateway, Netflix Eureka |
+| **Communication** | REST APIs, OpenFeign Clients |
+| **Security & Auth** | Spring Security, JSON Web Tokens (JWT) |
+| **Observability** | Micrometer, Zipkin (Distributed Tracing) |
+| **Testing** | JUnit 5, Mockito, Spring WebMvcTest |
+| **Database** | MySQL (Isolated DBs), Spring Data JPA |
+| **Tooling** | Maven, Lombok, Swagger / OpenAPI 3.0 |
 
 ---
 
-# Microservices Structure
+# 📁 Microservices Structure
 
 ```bash
 SmartSure-Insurance/
 │
-├── api-gateway
-├── auth-service
-├── policy-service
-├── claims-service
-├── admin-service
-├── eureka-server
-
-
-
+├── api-gateway/       # Port 8080 : Handles Routing & Authentication Filters
+├── auth-service/      # Port 8081 : Security Contexts, JWT logic & Registration
+├── policy-service/    # Port 8082 : Insurance Product Offerings & Purchasing
+├── claims-service/    # Port 8083 : Multipart File Storage & Lifecycle Routing
+├── admin-service/     # Port 8084 : Aggregation Facade & OpenFeign Integrations 
+├── eureka-server/     # Port 8761 : Local Service Registry & Discovery
 ```
 
 ---
 
-# API Endpoints
+# 📡 Key API Endpoints
 
-## Auth Service
+### 🔑 Auth Service
+* `POST /api/auth/register` - Register a Customer/Admin identity.
+* `POST /api/auth/login` - Authenticate and yield a signed token.
 
-* POST `/api/auth/register`
-* POST `/api/auth/login`
+### 📜 Policy Service
+* `GET /api/policies` - (Public) List all active policies.
+* `POST /api/policies/purchase` - (Customer) Formally purchase an active policy.
+* `POST /api/admin/policies` - (Admin) Inject a new valid policy into the market.
 
-## Policy Service
-
-### Public
-
-* GET `/api/policies`
-* GET `/api/policies/{id}`
-
-### Customer
-
-* POST `/api/policies/purchase`
-
-### Admin
-
-* POST `/api/admin/policies`
-* PUT `/api/admin/policies/{id}`
-* DELETE `/api/admin/policies/{id}`
-
-## Claims Service
-
-### Customer
-
-* POST `/api/claims/upload`
-* POST `/api/claims/initiate`
-* GET `/api/claims/status/{id}`
-
-### Internal (Used via OpenFeign)
-
-* PUT `/api/claims/internal/claims/review/{id}`
-* GET `/api/claims/internal/claims`
-* GET `/api/claims/internal/claims/reports`
-
-## Admin Service
-
-* PUT `/api/admin/claims/{id}/review`
-* GET `/api/admin/claims`
-* GET `/api/admin/reports`
+### 📋 Claims Service
+* `POST /api/claims/upload` - (Customer) Upload a physical `PDF` / `Image` to local file storage.
+* `POST /api/claims/initiate` - (Customer) Link an upload ID to a formal system claim.
+* `GET /api/claims/internal/claims` - (Internal) OpenFeign fetching routes bypassing external security configurations.
 
 ---
 
-# File Upload System
+# 🔬 Quality Assurance & Testing Strategy
 
-* Supports PDF & Image uploads
-* Stored in local file system (`uploads/`)
-* Linked with claim records in DB
-* Used during claim submission lifecycle
+To ensure enterprise-level code quality, strict testing paradigms are heavily utilized within every microservice boundary.
 
----
-
-# Testing Strategy
-
-## ✔ Swagger UI
-
-* API visualization & testing
-
-## ✔ Postman
-
-* End-to-end microservice testing
-* JWT authentication validation
-* File upload (multipart) testing
-* Full claim workflow testing
+* **✅ Unit Testing (`@MockBean`)**: Isolated `@Service` business-logic validation using **JUnit 5** and **Mockito** to strictly mock database calls and secondary dependencies without booting a heavy context.
+* **✅ Controller Integration (`MockMvc`)**: `MockMvcBuilders` are utilized across all modules mimicking raw HTTP protocol transactions ensuring Servlet Exceptions, JSON serializers, and headers intercept correctly.
+* **✅ API Definition**: Fully documented interactive GUI visualizations mapped over **Swagger / OpenAPI 3.0**.
+* **✅ Lifecycle Flow**: Advanced postman scripting evaluating multipart mappings and token interceptions dynamically.
 
 ---
 
-# End-to-End System Flow
+# 🔍 Observability & Distributed Tracing
+
+This project features a fully capable **Micrometer Tracing** bridge configured to export telemetry data natively to **Zipkin**. 
+This establishes complete visual visibility tracking a single origin request from the `api-gateway` traversing down to `admin-service` invoking OpenFeign networks internally directly within a live visual dashboard.
+
+---
+
+# 📊 End-to-End System Flow
 
 ```mermaid
 flowchart LR
 
-A[Login] --> B[JWT Token]
-B --> C[API Gateway]
-C --> D[Upload Claim Document]
-D --> E[Claim Submitted]
-E --> F[Admin Service Review]
-F --> G{Decision}
-G --> H[Approved]
-G --> I[Rejected]
-H --> J[Report Generated]
+A[Login] --> B[JWT Handshake]
+B --> C[API Gateway Filter]
+C --> D[Multipart File Upload]
+D --> E[Claim Struct Initialization]
+E --> F[Admin Feign Aggregation]
+F --> G{Decision Boundary}
+G -->|Accepted| H[Approve Route]
+G -->|Denied| I[Reject Route]
+H --> J[Tracing Captured -> Zipkin]
 I --> J
 ```
 
 ---
 
-# Key Challenges Solved
+# 🏆 Key Architectural Solutions Demonstrated
 
-* JWT authentication across microservices
-* API Gateway routing & filter chain issues
-* Eureka service registration & discovery
-* OpenFeign service-to-service communication
-* File upload handling in distributed system
-* End-to-end workflow consistency
-
----
-
-# Future Enhancements
-
-* React-based frontend dashboard
-* Email notifications (claim updates)
-* Docker containerization
-* Logging & monitoring system
-* Cloud deployment (AWS / Render)
+* **Distributed Authentication**: Intercepting headless JWT tokens reliably using custom Spring Cloud Gateway filter mappings.
+* **Service Networking**: Eliminating static routing boundaries by implementing dynamic Eureka DNS lookup variables.
+* **Synchronous Aggregation**: Leveraging Spring OpenFeign to establish Internal-only controller endpoints strictly utilized server-to-server.
+* **Unstructured Input Management**: Handling raw `multipart/form-data` inside distributed nodes seamlessly translating byte-streams into physical OS `/uploads`.
+* **Deep System Transparency**: 100% Probability Sampling routing into Zipkin via Micrometer allowing millisecond bottleneck analysis across remote instances.
+* **Strict Unit Coverage**: Validating internal methods systematically assuring continuous deployment integrity without DB dependencies.
 
 ---
 
-# What This Project Demonstrates
+# 🚀 Future Enhancements
 
-* Microservices architecture design
-* Secure authentication (JWT)
-* Real-world workflow simulation
-* Distributed system communication
-* Backend system design thinking
+* React-based frontend dashboard visualization.
+* Advanced Docker containerization & orchestration mappings.
+* Message Queues (RabbitMQ/Kafka) for asynchronous notification deliveries.
+* Cloud Provider deployment routing (AWS EC2 / Render).
 
 ---
 
-# 📄 License
+# 📄 Academic License & Acknowledgement
 
-This project is developed as part of a **Capgemini Spring Boot Microservices Evaluation Program**.
-
-This repository is intended for **learning, academic submission, and demonstration purposes only**.
+This project is expertly constructed as part of a **Capgemini Spring Boot Microservices Evaluation Program.**
+It operates as a demonstration and evaluation architecture designed for strict academic and simulated organizational environments.
 
 You are free to:
-- View and understand the code  
-- Use it for learning and practice  
-- Reference it for building similar projects  
+- View and audit the modular code configurations.
+- Utilize architectural design choices for practice and learning.
+- Reference internal dependencies in comparable environments.
 
-You are NOT allowed to:
-- Copy and submit it as your own work in evaluations  
-- Use it for commercial purposes without permission  
+⚠️ You are NOT allowed to:
+- Copy or clone this system for your own direct academic assessments.
+- Monetize these endpoints for immediate commercial viability without express engineering permission.
 
 ---
 
 # © Copyright
 
-© 2026 SmartSure Insurance System  
+**© 2026 SmartSure Insurance System**  
 
-Developed under **Capgemini Spring Boot Microservices Evaluation Program**.
-
-All rights reserved.
+Engineered structurally under the **Capgemini Spring Boot Microservices Evaluation Program**.  
+*All engineering rights reserved.*
 
 ---
 
-# Final Note
-
-This project is a **production-style backend simulation** designed to understand how scalable enterprise systems are built using microservices architecture.
-
-It reflects real-world backend engineering concepts used in modern companies.
+**Final Note:**  
+*This implementation is designed to reflect best-practice engineering standards prevalent in scalable Fortune 500 tech stacks today.*
