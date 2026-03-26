@@ -20,7 +20,7 @@ public class JwtUtil {
         return Keys.hmacShaKeyFor(SECRET.getBytes());
     }
 
-    // 🔥 UPDATED: include ROLE
+
     public String generateToken(String email, String role) {
 
         Map<String, Object> claims = new HashMap<>();

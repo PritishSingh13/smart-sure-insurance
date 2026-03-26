@@ -3,6 +3,7 @@ package com.smartsure.policyservice.controller;
 import com.smartsure.policyservice.dto.PurchaseRequest;
 import com.smartsure.policyservice.model.Policy;
 import com.smartsure.policyservice.service.PolicyService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,24 +21,23 @@ public class PolicyController {
 
     @PostMapping("/api/admin/policies")
     public Object createPolicy(
-            @RequestBody Object input,
+            @Valid @RequestBody Object input,
             @RequestHeader("X-User-Role") String role
     ) {
-        if (!role.equalsIgnoreCase("ADMIN")) {
+        if (role == null || !role.equalsIgnoreCase("ADMIN")) {
             throw new RuntimeException("ADMIN only");
         }
 
-        //  Directly pass to service (handles both single + multiple)
         return policyService.createPolicy(input);
     }
 
     @PutMapping("/api/admin/policies/{id}")
     public Policy updatePolicy(
             @PathVariable Long id,
-            @RequestBody Policy policy,
+            @Valid @RequestBody Policy policy,
             @RequestHeader("X-User-Role") String role
     ) {
-        if (!role.equalsIgnoreCase("ADMIN")) {
+        if (role == null || !role.equalsIgnoreCase("ADMIN")) {
             throw new RuntimeException("ADMIN only");
         }
         return policyService.updatePolicy(id, policy);
@@ -48,7 +48,7 @@ public class PolicyController {
             @PathVariable Long id,
             @RequestHeader("X-User-Role") String role
     ) {
-        if (!role.equalsIgnoreCase("ADMIN")) {
+        if (role == null || !role.equalsIgnoreCase("ADMIN")) {
             throw new RuntimeException("ADMIN only");
         }
         return policyService.deletePolicy(id);
@@ -70,11 +70,11 @@ public class PolicyController {
 
     @PostMapping("/api/policies/purchase")
     public String purchasePolicy(
-            @RequestBody PurchaseRequest request,
+            @Valid @RequestBody PurchaseRequest request,
             @RequestHeader("X-User-Email") String email,
             @RequestHeader("X-User-Role") String role
     ) {
-        if (!role.equalsIgnoreCase("CUSTOMER")) {
+        if (role == null || !role.equalsIgnoreCase("CUSTOMER")) {
             throw new RuntimeException("CUSTOMER only");
         }
 

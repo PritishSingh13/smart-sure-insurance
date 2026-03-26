@@ -1,18 +1,10 @@
-package com.smartsure.authservice.model;
+package com.smartsure.authservice.dto;
 
-import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
 
-@Entity
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class User {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class RegisterRequest {
 
     @NotBlank(message = "Name is required")
     private String name;
@@ -29,5 +21,5 @@ public class User {
     private String address;
 
     @NotBlank(message = "Role is required")
-    private String role; // CUSTOMER / ADMIN
+    private String role;
 }

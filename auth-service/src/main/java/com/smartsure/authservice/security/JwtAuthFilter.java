@@ -30,7 +30,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
         String path = request.getRequestURI();
 
-        //  Skip auth endpoints
+
         if (path.startsWith("/api/auth/")) {
             filterChain.doFilter(request, response);
             return;
@@ -48,7 +48,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
             try {
                 email = jwtUtil.extractEmail(token);
-                role = jwtUtil.extractRole(token); // 🔥 NEW
+                role = jwtUtil.extractRole(token);
             } catch (Exception e) {
                 System.out.println("Invalid JWT Token");
             }

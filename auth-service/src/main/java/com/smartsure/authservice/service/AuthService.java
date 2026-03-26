@@ -1,6 +1,6 @@
 package com.smartsure.authservice.service;
 
-import com.smartsure.authservice.model.*;
+import com.smartsure.authservice.dto.*;
 import com.smartsure.authservice.model.User;
 import com.smartsure.authservice.repository.UserRepository;
 import com.smartsure.authservice.security.JwtUtil;
@@ -24,7 +24,9 @@ public class AuthService {
         this.jwtUtil = jwtUtil;
     }
 
+    // =========================
     // REGISTER
+    // =========================
     public String register(RegisterRequest request) {
 
         Optional<User> existing = userRepository.findByEmail(request.getEmail());
@@ -39,7 +41,6 @@ public class AuthService {
         user.setPhone(request.getPhone());
         user.setAddress(request.getAddress());
 
-
         String role = (request.getRole() == null || request.getRole().isEmpty())
                 ? "CUSTOMER"
                 : request.getRole().trim().toUpperCase();
@@ -51,7 +52,9 @@ public class AuthService {
         return "User registered successfully!";
     }
 
+    // =========================
     // LOGIN
+    // =========================
     public AuthResponse login(LoginRequest request) {
 
         User user = userRepository.findByEmail(request.getEmail())
@@ -61,11 +64,10 @@ public class AuthService {
             throw new RuntimeException("Invalid credentials");
         }
 
-
         String role = user.getRole().trim().toUpperCase();
 
         String token = jwtUtil.generateToken(user.getEmail(), role);
 
-        return new AuthResponse(token, "Login successful");
+        return new AuthResponse(token, role, user.getEmail());
     }
 }

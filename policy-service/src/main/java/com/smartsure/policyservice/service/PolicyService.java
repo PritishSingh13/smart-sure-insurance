@@ -27,12 +27,21 @@ public class PolicyService {
     // =========================
     public Object createPolicy(Object requestBody) {
 
+        if (requestBody == null) {
+            throw new RuntimeException("Request body cannot be empty");
+        }
+
         ObjectMapper mapper = new ObjectMapper();
 
-        // If ARRAY → multiple policies
+        // MULTIPLE
         if (requestBody instanceof List) {
 
             List<?> rawList = (List<?>) requestBody;
+
+            if (rawList.isEmpty()) {
+                throw new RuntimeException("Policy list cannot be empty");
+            }
+
             List<Policy> savedPolicies = new ArrayList<>();
 
             for (Object obj : rawList) {
@@ -43,7 +52,7 @@ public class PolicyService {
             return savedPolicies;
         }
 
-        // If SINGLE → one policy
+        // SINGLE
         Policy policy = mapper.convertValue(requestBody, Policy.class);
         return policyRepository.save(policy);
     }
@@ -52,6 +61,10 @@ public class PolicyService {
     // UPDATE POLICY
     // =========================
     public Policy updatePolicy(Long id, Policy updatedPolicy) {
+
+        if (id == null) {
+            throw new RuntimeException("Policy ID cannot be null");
+        }
 
         Policy existing = policyRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Policy not found with id: " + id));
@@ -75,14 +88,27 @@ public class PolicyService {
     // GET POLICY BY ID
     // =========================
     public Policy getPolicyById(Long id) {
+
+        if (id == null) {
+            throw new RuntimeException("Policy ID cannot be null");
+        }
+
         return policyRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Policy not found with id: " + id));
     }
 
     // =========================
-    // PURCHASE POLICY (UPDATED FLOW)
+    // PURCHASE POLICY
     // =========================
     public String purchasePolicy(Long policyId, String userEmail) {
+
+        if (policyId == null) {
+            throw new RuntimeException("Policy ID is required");
+        }
+
+        if (userEmail == null || userEmail.isEmpty()) {
+            throw new RuntimeException("User email is required");
+        }
 
         Policy policy = policyRepository.findById(policyId)
                 .orElseThrow(() -> new RuntimeException("Policy not found with id: " + policyId));
@@ -104,6 +130,11 @@ public class PolicyService {
     // DELETE POLICY
     // =========================
     public String deletePolicy(Long id) {
+
+        if (id == null) {
+            throw new RuntimeException("Policy ID cannot be null");
+        }
+
         policyRepository.deleteById(id);
         return "Policy deleted successfully";
     }
