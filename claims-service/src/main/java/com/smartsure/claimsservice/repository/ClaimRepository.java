@@ -10,9 +10,9 @@ import java.util.Optional;
 @Repository
 public interface ClaimRepository extends JpaRepository<Claim, Long> {
 
-    // Existing
+
     List<Claim> findByCreatedBy(String createdBy);
 
-    // NEW (IMPORTANT FIX)
+
     Optional<Claim> findByClaimNumber(String claimNumber);
 }

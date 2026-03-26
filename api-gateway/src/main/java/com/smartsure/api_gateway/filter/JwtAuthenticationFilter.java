@@ -72,7 +72,7 @@ public class JwtAuthenticationFilter extends AbstractGatewayFilterFactory<JwtAut
                 String email = claims.getSubject();
                 String role = claims.get("role", String.class);
 
-                //FIX: SEND BOTH HEADER TYPES (COMPATIBILITY)
+
                 ServerHttpRequest modifiedRequest = exchange.getRequest()
                         .mutate()
                         .header("X-Auth-User", email)

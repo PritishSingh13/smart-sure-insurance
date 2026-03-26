@@ -19,7 +19,7 @@ public class ClaimController {
     }
 
     // =========================
-    // USER APIs (SIMPLIFIED FLOW)
+    // USER APIs (SIMPLIFIED FLOW + VALIDATION)
     // =========================
 
     @PostMapping("/api/claims/upload")
@@ -29,6 +29,20 @@ public class ClaimController {
             @RequestParam("claimantName") String claimantName,
             @RequestHeader("X-Auth-User") String userEmail
     ) {
+
+        //  VALIDATIONS
+        if (policyId == null || policyId <= 0) {
+            throw new RuntimeException("Invalid Policy ID");
+        }
+
+        if (claimantName == null || claimantName.trim().isEmpty()) {
+            throw new RuntimeException("Claimant name is required");
+        }
+
+        if (file == null || file.isEmpty()) {
+            throw new RuntimeException("File must be uploaded");
+        }
+
         return claimService.uploadClaimWithFile(
                 file, policyId, claimantName, userEmail);
     }
@@ -38,20 +52,45 @@ public class ClaimController {
             @RequestParam("claimNumber") String claimNumber,
             @RequestHeader("X-Auth-User") String userEmail
     ) {
+
+        //  VALIDATION
+        if (claimNumber == null || claimNumber.trim().isEmpty()) {
+            throw new RuntimeException("Claim Number is required");
+        }
+
         return claimService.initiateClaim(claimNumber, userEmail);
     }
 
     @GetMapping("/api/claims/status/{claimNumber}")
-    public ClaimDto getStatus(
-            @PathVariable String claimNumber){
+    public ClaimDto getStatus(@PathVariable String claimNumber) {
+
+        //  VALIDATION
+        if (claimNumber == null || claimNumber.trim().isEmpty()) {
+            throw new RuntimeException("Claim Number is required");
+        }
+
         return claimService.getClaimStatus(claimNumber);
     }
 
-    // ADMIN APIs (UNCHANGED)
+    // =========================
+    // ADMIN APIs (VALIDATED)
+    // =========================
 
     @PutMapping("/api/admin/claims/{claimId}/review")
     public String reviewClaim(@PathVariable Long claimId,
                               @RequestParam String status) {
+
+        //  VALIDATIONS
+        if (claimId == null || claimId <= 0) {
+            throw new RuntimeException("Invalid Claim ID");
+        }
+
+        if (status == null ||
+                (!status.equalsIgnoreCase("APPROVED") &&
+                        !status.equalsIgnoreCase("REJECTED"))) {
+            throw new RuntimeException("Status must be APPROVED or REJECTED");
+        }
+
         return claimService.reviewClaim(claimId, status);
     }
 
@@ -65,7 +104,9 @@ public class ClaimController {
         return claimService.getReportData();
     }
 
-    // INTERNAL (UNCHANGED)
+    // =========================
+    // INTERNAL APIs
+    // =========================
 
     @PutMapping("/internal/claims/review/{claimId}")
     public String reviewInternal(@PathVariable Long claimId,
