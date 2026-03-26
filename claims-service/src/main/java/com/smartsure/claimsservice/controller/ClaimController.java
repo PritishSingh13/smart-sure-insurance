@@ -1,5 +1,6 @@
 package com.smartsure.claimsservice.controller;
 
+import com.smartsure.claimsservice.dto.ClaimDto;
 import com.smartsure.claimsservice.entity.Claim;
 import com.smartsure.claimsservice.service.ClaimService;
 import org.springframework.web.bind.annotation.*;
@@ -18,37 +19,35 @@ public class ClaimController {
     }
 
     // =========================
-    // USER APIs
+    // USER APIs (SIMPLIFIED FLOW)
     // =========================
 
     @PostMapping("/api/claims/upload")
-    public Claim uploadClaimWithFile(
+    public ClaimDto uploadClaimWithFile(
             @RequestParam("file") MultipartFile file,
-            @RequestParam("policyNumber") String policyNumber,
+            @RequestParam("policyId") Long policyId,
             @RequestParam("claimantName") String claimantName,
-            @RequestParam("claimType") String claimType,
-            @RequestParam("claimAmount") Double claimAmount,
             @RequestHeader("X-Auth-User") String userEmail
     ) {
         return claimService.uploadClaimWithFile(
-                file, policyNumber, claimantName, claimType, claimAmount, userEmail);
+                file, policyId, claimantName, userEmail);
     }
 
     @PostMapping("/api/claims/initiate")
-    public Claim initiateClaim(@RequestParam Long claimId,
-                               @RequestHeader("X-Auth-User") String userEmail) {
-        return claimService.initiateClaim(claimId, userEmail);
+    public ClaimDto initiateClaim(
+            @RequestParam("claimNumber") String claimNumber,
+            @RequestHeader("X-Auth-User") String userEmail
+    ) {
+        return claimService.initiateClaim(claimNumber, userEmail);
     }
 
-    @GetMapping("/api/claims/status/{claimId}")
-    public String getStatus(@PathVariable Long claimId,
-                            @RequestHeader("X-Auth-User") String userEmail) {
-        return claimService.getClaimStatus(claimId, userEmail);
+    @GetMapping("/api/claims/status/{claimNumber}")
+    public ClaimDto getStatus(
+            @PathVariable String claimNumber){
+        return claimService.getClaimStatus(claimNumber);
     }
 
-    // =========================
-    // ADMIN APIs (FOR GATEWAY)
-    // =========================
+    // ADMIN APIs (UNCHANGED)
 
     @PutMapping("/api/admin/claims/{claimId}/review")
     public String reviewClaim(@PathVariable Long claimId,
@@ -66,9 +65,7 @@ public class ClaimController {
         return claimService.getReportData();
     }
 
-    // =========================
-    // INTERNAL APIs (FOR FEIGN)
-    // =========================
+    // INTERNAL (UNCHANGED)
 
     @PutMapping("/internal/claims/review/{claimId}")
     public String reviewInternal(@PathVariable Long claimId,

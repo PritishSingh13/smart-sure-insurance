@@ -1,19 +1,15 @@
 package com.smartsure.claimsservice.service;
 
+import com.smartsure.claimsservice.dto.ClaimDto;
 import com.smartsure.claimsservice.entity.Claim;
 import com.smartsure.claimsservice.repository.ClaimRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
+import java.nio.file.*;
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class ClaimService {
@@ -26,20 +22,21 @@ public class ClaimService {
     }
 
     // =========================
-    // UPLOAD CLAIM WITH FILE + USER
+    // UPLOAD CLAIM (SIMPLIFIED)
     // =========================
-    public Claim uploadClaimWithFile(MultipartFile file,
-                                     String policyNumber,
-                                     String claimantName,
-                                     String claimType,
-                                     Double claimAmount,
-                                     String userEmail) {
+    public ClaimDto uploadClaimWithFile(MultipartFile file,
+                                        Long policyId,
+                                        String claimantName,
+                                        String userEmail) {
 
         Claim claim = new Claim();
-        claim.setPolicyNumber(policyNumber);
+
+        claim.setPolicyId(policyId);
         claim.setClaimantName(claimantName);
-        claim.setClaimType(claimType);
-        claim.setClaimAmount(claimAmount);
+
+        // ✅ AUTO VALUES
+        claim.setClaimType("GENERAL");
+        claim.setClaimAmount(0.0);
 
         claim.setStatus("UPLOADED");
         claim.setClaimDate(LocalDate.now());
@@ -61,41 +58,33 @@ public class ClaimService {
             }
         }
 
-        return claimRepository.save(claim);
+        Claim saved = claimRepository.save(claim);
+        return convertToDto(saved);
     }
 
     // =========================
-    // INITIATE CLAIMM
+    // INITIATE CLAIM
     // =========================
-    public Claim initiateClaim(Long id, String userEmail) {
-        Claim claim = claimRepository.findById(id)
+    public ClaimDto initiateClaim(String claimNumber, String userEmail) {
+        Claim claim = claimRepository.findByClaimNumber(claimNumber)
                 .orElseThrow(() -> new RuntimeException("Claim not found"));
 
         claim.setStatus("SUBMITTED");
-        return claimRepository.save(claim);
+        return convertToDto(claimRepository.save(claim));
     }
 
     // =========================
-    // GET CLAIM STATUS
-    // =========================
-    public String getClaimStatus(Long id, String userEmail) {
-        Claim claim = claimRepository.findById(id)
+    public ClaimDto getClaimStatus(String claimNumber) {
+        Claim claim = claimRepository.findByClaimNumber(claimNumber)
                 .orElseThrow(() -> new RuntimeException("Claim not found"));
 
-        return claim.getStatus();
+        return convertToDto(claim);
     }
 
-    // =========================
-    // REVIEW CLAIM (ADMIN)
     // =========================
     public String reviewClaim(Long id, String status) {
         Claim claim = claimRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Claim not found"));
-
-        if (!status.equalsIgnoreCase("APPROVED") &&
-                !status.equalsIgnoreCase("REJECTED")) {
-            throw new RuntimeException("Invalid status");
-        }
 
         claim.setStatus(status.toUpperCase());
         claimRepository.save(claim);
@@ -103,16 +92,10 @@ public class ClaimService {
         return "Claim " + status.toUpperCase();
     }
 
-    // =========================
-    // GET ALL CLAIMS
-    // =========================
     public List<Claim> getAllClaims() {
         return claimRepository.findAll();
     }
 
-    // =========================
-    // GET CLAIM REPORT DATA
-    // =========================
     public Map<String, Long> getReportData() {
         Map<String, Long> report = new HashMap<>();
 
@@ -129,5 +112,14 @@ public class ClaimService {
         report.put("REJECTED", rejected);
 
         return report;
+    }
+
+    private ClaimDto convertToDto(Claim claim) {
+        ClaimDto dto = new ClaimDto();
+        dto.setClaimNumber(claim.getClaimNumber());
+        dto.setPolicyId(claim.getPolicyId());
+        dto.setClaimantName(claim.getClaimantName());
+        dto.setStatus(claim.getStatus());
+        return dto;
     }
 }

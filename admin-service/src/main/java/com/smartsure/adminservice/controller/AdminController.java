@@ -2,6 +2,8 @@ package com.smartsure.adminservice.controller;
 
 import com.smartsure.adminservice.client.ClaimsClient;
 import com.smartsure.adminservice.client.PolicyClient;
+import com.smartsure.adminservice.dto.ClaimDto;
+import com.smartsure.adminservice.dto.PolicyDto;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -34,7 +36,7 @@ public class AdminController {
     // ADMIN: GET ALL CLAIMS
     // =========================
     @GetMapping("/claims")
-    public List<Object> getAllClaims() {
+    public List<ClaimDto> getAllClaims() {
         return claimsClient.getAllClaims();
     }
 
@@ -50,7 +52,7 @@ public class AdminController {
     // ADMIN: CREATE POLICY
     // =========================
     @PostMapping("/policies")
-    public Object createPolicy(@RequestBody Object policy) {
+    public PolicyDto createPolicy(@RequestBody PolicyDto policy) {
         return policyClient.createPolicy(policy);
     }
 
@@ -58,8 +60,8 @@ public class AdminController {
     // ADMIN: UPDATE POLICY
     // =========================
     @PutMapping("/policies/{id}")
-    public Object updatePolicy(@PathVariable Long id,
-                               @RequestBody Object policy) {
+    public PolicyDto updatePolicy(@PathVariable Long id,
+                                  @RequestBody PolicyDto policy) {
         return policyClient.updatePolicy(id, policy);
     }
 
