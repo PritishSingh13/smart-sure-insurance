@@ -47,7 +47,7 @@ body {
   object-fit: cover;
   object-position: center;
   z-index: 0;
-  filter: saturate(0.94) contrast(1.06) brightness(0.82);
+  filter: saturate(0.85) contrast(1.1) brightness(0.70) blur(0.5px);
 }
 
 .smartsure-stage__shade,
@@ -61,8 +61,8 @@ body {
 .smartsure-stage__shade {
   inset: 0;
   background:
-    linear-gradient(90deg, rgba(5, 19, 31, 0.98) 0%, rgba(7, 35, 52, 0.94) 29%, rgba(8, 67, 85, 0.58) 58%, rgba(4, 16, 26, 0.15) 100%),
-    linear-gradient(180deg, rgba(2, 12, 20, 0.88) 0%, rgba(4, 18, 29, 0.25) 37%, rgba(4, 17, 28, 0.86) 100%);
+    linear-gradient(90deg, rgba(5, 19, 31, 0.99) 0%, rgba(7, 35, 52, 0.97) 29%, rgba(8, 67, 85, 0.70) 58%, rgba(4, 16, 26, 0.25) 100%),
+    linear-gradient(180deg, rgba(2, 12, 20, 0.92) 0%, rgba(4, 18, 29, 0.35) 37%, rgba(4, 17, 28, 0.90) 100%);
 }
 
 .smartsure-stage__texture {
@@ -88,8 +88,8 @@ body {
   width: min(58%, 840px);
   height: min(78vh, 720px);
   background:
-    radial-gradient(circle at 33% 54%, rgba(4, 24, 38, 0.99), rgba(5, 33, 48, 0.92) 48%, rgba(6, 41, 58, 0.35) 75%, rgba(6, 41, 58, 0) 100%),
-    linear-gradient(90deg, rgba(4, 19, 31, 0.99), rgba(4, 28, 43, 0.88) 63%, rgba(4, 28, 43, 0));
+    radial-gradient(circle at 33% 54%, rgba(4, 24, 38, 1), rgba(5, 33, 48, 0.98) 48%, rgba(6, 41, 58, 0.50) 75%, rgba(6, 41, 58, 0) 100%),
+    linear-gradient(90deg, rgba(4, 19, 31, 1), rgba(4, 28, 43, 0.95) 63%, rgba(4, 28, 43, 0));
 }
 
 .smartsure-stage__cover--footer {
