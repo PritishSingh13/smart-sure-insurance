@@ -4,8 +4,14 @@ import com.smartsure.adminservice.dto.PolicyDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @FeignClient(name = "POLICY-SERVICE")
 public interface PolicyClient {
+
+    // GET ALL POLICIES
+    @GetMapping("/internal/policies")
+    List<PolicyDto> getAllPolicies();
 
     // CREATE POLICY
     @PostMapping("/internal/policies")

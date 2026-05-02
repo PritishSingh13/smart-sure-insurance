@@ -1,6 +1,7 @@
 package com.smartsure.adminservice.client;
 
 import com.smartsure.adminservice.dto.ClaimDto;
+import org.springframework.http.ResponseEntity;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,4 +23,8 @@ public interface ClaimsClient {
     // GET REPORTS
     @GetMapping("/internal/claims/reports")
     Map<String, Long> getReports();
+
+    // GET CLAIM DOCUMENT
+    @GetMapping("/internal/claims/{id}/document")
+    ResponseEntity<byte[]> getClaimDocument(@PathVariable("id") Long id);
 }
