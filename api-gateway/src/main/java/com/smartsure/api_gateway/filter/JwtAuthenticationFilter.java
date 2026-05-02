@@ -50,29 +50,38 @@ public class JwtAuthenticationFilter extends AbstractGatewayFilterFactory<JwtAut
             }
 
             // CHECK AUTH HEADER
-            if (!exchange.getRequest().getHeaders().containsKey(HttpHeaders.AUTHORIZATION)) {
-                exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
-                return exchange.getResponse().setComplete();
-            }
-
             String authHeader = exchange.getRequest()
                     .getHeaders()
                     .getFirst(HttpHeaders.AUTHORIZATION);
+            String queryToken = exchange.getRequest()
+                    .getQueryParams()
+                    .getFirst("access_token");
 
-            if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            if ((authHeader == null || authHeader.isBlank()) && (queryToken == null || queryToken.isBlank())) {
+                exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
+                return exchange.getResponse().setComplete();
+            }
+             //Bearer Token Check
+            if ((authHeader == null || !authHeader.startsWith("Bearer ")) && (queryToken == null || queryToken.isBlank())) {
                 exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
                 return exchange.getResponse().setComplete();
             }
 
-            String token = authHeader.substring(7);
+
+              //Extract Token
+            String token = authHeader != null && authHeader.startsWith("Bearer ")
+                    ? authHeader.substring(7)
+                    : queryToken;
 
             try {
+
+                // Validate Token + Extract Data
                 Claims claims = extractClaims(token);
 
                 String email = claims.getSubject();
                 String role = claims.get("role", String.class);
 
-
+                //Add Headers
                 ServerHttpRequest modifiedRequest = exchange.getRequest()
                         .mutate()
                         .header("X-Auth-User", email)
@@ -80,7 +89,7 @@ public class JwtAuthenticationFilter extends AbstractGatewayFilterFactory<JwtAut
                         .header("X-User-Email", email)
                         .header("X-User-Role", role)
                         .build();
-
+                //Forward Request
                 return chain.filter(exchange.mutate().request(modifiedRequest).build());
 
             } catch (Exception e) {

@@ -15,23 +15,7 @@ spring:
           predicates:
             - Path=/api/auth/**
 
-        # POLICY SERVICE (INCLUDING ADMIN)
-        - id: policy-service
-          uri: lb://POLICY-SERVICE
-          predicates:
-            - Path=/api/policies/**,/api/admin/policies/**
-          filters:
-            - JwtAuthenticationFilter
-
-        # CLAIMS SERVICE (USER APIs)
-        - id: claims-service
-          uri: lb://CLAIMS-SERVICE
-          predicates:
-            - Path=/api/claims/**
-          filters:
-            - JwtAuthenticationFilter
-
-        # ADMIN CLAIM ROUTES
+        # ADMIN CLAIMS (stream and review directly from claims-service)
         - id: admin-claims-service
           uri: lb://CLAIMS-SERVICE
           predicates:
@@ -44,6 +28,30 @@ spring:
           uri: lb://CLAIMS-SERVICE
           predicates:
             - Path=/api/admin/reports
+          filters:
+            - JwtAuthenticationFilter
+
+        # ADMIN ORCHESTRATION SERVICE
+        - id: admin-service
+          uri: lb://ADMIN-SERVICE
+          predicates:
+            - Path=/api/admin/**
+          filters:
+            - JwtAuthenticationFilter
+
+        # POLICY SERVICE (CUSTOMER + CATALOG)
+        - id: policy-service
+          uri: lb://POLICY-SERVICE
+          predicates:
+            - Path=/api/policies/**
+          filters:
+            - JwtAuthenticationFilter
+
+        # CLAIMS SERVICE (USER APIs)
+        - id: claims-service
+          uri: lb://CLAIMS-SERVICE
+          predicates:
+            - Path=/api/claims/**
           filters:
             - JwtAuthenticationFilter
 
@@ -65,7 +73,8 @@ jwt:
 management:
   tracing:
     sampling:
-      probability: 1.0
+      probability: 0.0
   zipkin:
     tracing:
+      enabled: false
       endpoint: "http://localhost:9411/api/v2/spans"
