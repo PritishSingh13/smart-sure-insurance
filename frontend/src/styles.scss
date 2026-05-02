@@ -8,3 +8,1124 @@ body {
   background-color: #f8fafc;
   color: #334155;
 }
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.smartsure-landing {
+  min-height: 100vh;
+  width: 100%;
+  display: block;
+  padding: 0;
+  overflow: hidden;
+  background: #071824;
+  font-family: 'Inter', 'Roboto', sans-serif;
+}
+
+.smartsure-stage {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  overflow: hidden;
+  isolation: isolate;
+  background: #071824;
+}
+
+.smartsure-stage__image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  z-index: 0;
+  filter: saturate(0.94) contrast(1.06) brightness(0.82);
+}
+
+.smartsure-stage__shade,
+.smartsure-stage__texture,
+.smartsure-stage__cover {
+  position: absolute;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.smartsure-stage__shade {
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgba(5, 19, 31, 0.98) 0%, rgba(7, 35, 52, 0.94) 29%, rgba(8, 67, 85, 0.58) 58%, rgba(4, 16, 26, 0.15) 100%),
+    linear-gradient(180deg, rgba(2, 12, 20, 0.88) 0%, rgba(4, 18, 29, 0.25) 37%, rgba(4, 17, 28, 0.86) 100%);
+}
+
+.smartsure-stage__texture {
+  inset: 0;
+  background:
+    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.05) 0 1px, transparent 1px 8px),
+    repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.025) 0 1px, transparent 1px 10px);
+  mix-blend-mode: soft-light;
+  opacity: 0.68;
+}
+
+.smartsure-stage__cover--nav {
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 126px;
+  background: linear-gradient(180deg, rgba(4, 19, 30, 0.96), rgba(4, 19, 30, 0.42), rgba(4, 19, 30, 0));
+}
+
+.smartsure-stage__cover--copy {
+  left: 0;
+  top: 112px;
+  width: min(58%, 840px);
+  height: min(78vh, 720px);
+  background:
+    radial-gradient(circle at 33% 54%, rgba(4, 24, 38, 0.99), rgba(5, 33, 48, 0.92) 48%, rgba(6, 41, 58, 0.35) 75%, rgba(6, 41, 58, 0) 100%),
+    linear-gradient(90deg, rgba(4, 19, 31, 0.99), rgba(4, 28, 43, 0.88) 63%, rgba(4, 28, 43, 0));
+}
+
+.smartsure-stage__cover--footer {
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 84px;
+  background: linear-gradient(180deg, rgba(4, 19, 30, 0), rgba(4, 15, 24, 0.9));
+}
+
+.smartsure-nav {
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 104px;
+  display: grid;
+  grid-template-columns: minmax(150px, 1fr) auto minmax(210px, 1fr);
+  align-items: center;
+  gap: clamp(18px, 3vw, 42px);
+  padding: 0 clamp(28px, 5.6vw, 76px);
+  z-index: 3;
+}
+
+.smartsure-brand {
+  color: #ffffff;
+  font-size: clamp(20px, 2vw, 28px);
+  font-weight: 900;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+}
+
+.smartsure-links {
+  justify-self: center;
+  display: flex;
+  align-items: center;
+  gap: clamp(22px, 3vw, 42px);
+}
+
+.smartsure-links a {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: clamp(14px, 1.2vw, 16px);
+  line-height: 1;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-decoration: none;
+  transition: color 180ms ease, transform 180ms ease;
+}
+
+.smartsure-links a:hover {
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+.smartsure-actions {
+  justify-self: end;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.smartsure-pill,
+.smartsure-cta {
+  border: 0;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: transform 180ms ease, box-shadow 180ms ease, background-color 180ms ease;
+}
+
+.smartsure-pill {
+  min-width: 88px;
+  height: 42px;
+  padding: 0 20px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+.smartsure-pill--outline {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #ffffff;
+  backdrop-filter: blur(10px);
+  letter-spacing: 0.01em;
+}
+
+.smartsure-pill--quote {
+  min-width: 154px;
+  height: 54px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: linear-gradient(135deg, #1a9ba3, #0d7078);
+  color: #ffffff;
+  font-size: 16px;
+  text-transform: uppercase;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  letter-spacing: 0.02em;
+}
+
+.smartsure-pill:hover,
+.smartsure-cta:hover,
+.smartsure-chat:hover {
+  transform: translateY(-2px);
+}
+
+.smartsure-hero {
+  position: relative;
+  z-index: 2;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 44px;
+  padding: 122px clamp(28px, 5.6vw, 76px) 98px;
+}
+
+.smartsure-hero__copy {
+  width: min(850px, 56vw);
+  margin-top: 14vh;
+  animation: fadeInUp 0.65s ease both;
+}
+
+.smartsure-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  margin-bottom: 16px;
+  padding: 0 15px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.95);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  backdrop-filter: blur(12px);
+}
+
+.smartsure-hero__copy h1 {
+  margin: 0 0 22px;
+  color: #ffffff;
+  font-size: clamp(50px, 6.8vw, 112px);
+  line-height: 0.98;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+}
+
+.smartsure-hero__copy h1 span {
+  color: #ffffff;
+}
+
+.smartsure-hero__copy p {
+  width: min(100%, 560px);
+  margin: 0 0 30px;
+  color: rgba(255, 255, 255, 0.88);
+  font-size: clamp(15px, 1.15vw, 18px);
+  line-height: 1.65;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+
+.smartsure-assurance-card {
+  width: min(100%, 520px);
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 30px;
+}
+
+.smartsure-assurance-card div {
+  min-height: 82px;
+  padding: 15px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(16px);
+}
+
+.smartsure-assurance-card strong {
+  display: block;
+  color: #ffffff;
+  font-size: 24px;
+  line-height: 1;
+  font-weight: 900;
+  letter-spacing: -0.01em;
+}
+
+.smartsure-assurance-card span {
+  display: block;
+  margin-top: 8px;
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 11px;
+  line-height: 1.25;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+
+.smartsure-cta {
+  min-height: 54px;
+  display: inline-flex;
+  align-items: center;
+  gap: 18px;
+  padding: 0 34px 0 36px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #ffffff, #f5f5f5);
+  color: #0a1f2e;
+  font-size: 16px;
+  font-weight: 900;
+  text-transform: uppercase;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
+  letter-spacing: 0.02em;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.smartsure-cta:hover {
+  background: linear-gradient(135deg, #ffffff, #ffffff);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.25);
+}
+
+.smartsure-cta span {
+  font-size: 26px;
+  line-height: 1;
+}
+
+.smartsure-insight-panel {
+  display: block;
+  width: min(330px, 32vw);
+  margin-right: 26px;
+  align-self: center;
+  padding: 22px;
+  border: 1px solid rgba(255, 242, 227, 0.2);
+  border-radius: 8px;
+  background: rgba(4, 19, 30, 0.52);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.28);
+  backdrop-filter: blur(16px);
+}
+
+.smartsure-insight-panel__header,
+.smartsure-insight-panel__metric {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 18px;
+}
+
+.smartsure-insight-panel__header span {
+  color: #fff2e3;
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.smartsure-insight-panel__header strong {
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: #1d8d8d;
+  color: #fff8ee;
+  font-size: 10px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.smartsure-insight-panel__metric {
+  margin-top: 26px;
+}
+
+.smartsure-insight-panel__metric span {
+  color: rgba(255, 244, 231, 0.74);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.smartsure-insight-panel__metric strong {
+  color: #c8ece8;
+  font-size: 38px;
+  line-height: 1;
+  font-weight: 900;
+}
+
+.smartsure-insight-panel__bar {
+  height: 10px;
+  margin: 16px 0 22px;
+  border-radius: 999px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.smartsure-insight-panel__bar span {
+  display: block;
+  width: 92%;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #fff2e3, #1d8d8d);
+}
+
+.smartsure-insight-panel__list {
+  display: grid;
+  gap: 10px;
+}
+
+.smartsure-insight-panel__list p {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  color: rgba(255, 244, 231, 0.88);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.smartsure-insight-panel__list p span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #c8ece8;
+  box-shadow: 0 0 0 5px rgba(200, 236, 232, 0.12);
+}
+
+.smartsure-footer {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 18px;
+  z-index: 3;
+  color: rgba(255, 255, 255, 0.7);
+  text-align: center;
+  font-size: clamp(13px, 1.2vw, 18px);
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+
+.smartsure-chat {
+  position: absolute;
+  z-index: 3;
+  right: clamp(58px, 7.2vw, 92px);
+  bottom: clamp(42px, 6vw, 68px);
+  width: 70px;
+  height: 70px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #0d7078, #0a5a61);
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 900;
+  cursor: pointer;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
+  transition: transform 180ms ease, box-shadow 180ms ease;
+  letter-spacing: 0.02em;
+}
+
+.smartsure-support {
+  position: absolute;
+  z-index: 4;
+  right: clamp(48px, 6vw, 76px);
+  bottom: clamp(128px, 12vw, 158px);
+  width: min(318px, calc(100% - 48px));
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.98);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(20px);
+  animation: fadeInUp 0.28s ease both;
+}
+
+.smartsure-support__top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 18px;
+  padding: 18px 18px 14px;
+  border-bottom: 1px solid rgba(17, 17, 17, 0.08);
+}
+
+.smartsure-support__top strong,
+.smartsure-support__top span {
+  display: block;
+}
+
+.smartsure-support__top strong {
+  color: #0a1f2e;
+  font-size: 15px;
+  font-weight: 900;
+  letter-spacing: -0.01em;
+}
+
+.smartsure-support__top span {
+  margin-top: 3px;
+  color: #0d7078;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.smartsure-support__top button {
+  width: 28px;
+  height: 28px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(17, 17, 17, 0.08);
+  color: #111111;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.smartsure-support__body {
+  padding: 18px;
+}
+
+.smartsure-support__body p {
+  margin: 0 0 16px;
+  color: #1a3a47;
+  font-size: 13px;
+  line-height: 1.5;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+.smartsure-support__body button {
+  min-height: 40px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #0d7078, #0a5a61);
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 900;
+  cursor: pointer;
+  letter-spacing: 0.02em;
+}
+
+.smartsure-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: rgba(0, 0, 0, 0.42);
+  backdrop-filter: blur(8px);
+}
+
+.smartsure-modal__panel {
+  position: relative;
+  width: min(100%, 460px);
+  max-height: calc(100vh - 48px);
+  overflow: auto;
+  padding: 36px;
+  border-radius: 28px;
+  background: #ffffff;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.3);
+  animation: fadeInUp 0.28s ease both;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.smartsure-modal__close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  color: #6b7280;
+  background: transparent;
+  cursor: pointer;
+}
+
+.smartsure-modal__close:hover {
+  background: #f4f4f5;
+  color: #171717;
+}
+
+.smartsure-modal__close svg {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.smartsure-modal__heading {
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.smartsure-modal__heading h2 {
+  margin: 0 0 7px;
+  color: #0a1f2e;
+  font-size: 30px;
+  line-height: 1.1;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+}
+
+.smartsure-modal__heading p {
+  margin: 0;
+  color: #5a6c7a;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+.smartsure-error {
+  margin-bottom: 18px;
+  padding: 13px 15px;
+  border: 1px solid #fecaca;
+  border-radius: 15px;
+  background: #fef2f2;
+  color: #dc2626;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.smartsure-form {
+  display: grid;
+  gap: 16px;
+}
+
+.smartsure-form--register {
+  gap: 13px;
+}
+
+.smartsure-form label {
+  display: grid;
+  gap: 7px;
+}
+
+.smartsure-form span {
+  color: #2d3e4f;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+}
+
+.smartsure-form input,
+.smartsure-form select {
+  width: 100%;
+  min-height: 46px;
+  padding: 0 15px;
+  border: 1px solid #d1d9e0;
+  border-radius: 13px;
+  outline: none;
+  background: #f8fafb;
+  color: #0a1f2e;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+
+.smartsure-form small {
+  color: #dc2626;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.smartsure-password-field,
+.smartsure-phone-field {
+  display: flex;
+  align-items: stretch;
+  gap: 8px;
+}
+
+.smartsure-password-field {
+  position: relative;
+}
+
+.smartsure-password-field input {
+  padding-right: 48px;
+}
+
+.smartsure-password-field button {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: #45606f;
+  cursor: pointer;
+}
+
+.smartsure-password-field button:hover {
+  background: rgba(13, 112, 120, 0.1);
+  color: #0d7078;
+}
+
+.smartsure-password-field svg {
+  width: 19px;
+  height: 19px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.smartsure-phone-field select {
+  flex: 0 0 45%;
+}
+
+.smartsure-phone-field input {
+  min-width: 0;
+}
+
+.smartsure-form input:focus,
+.smartsure-form select:focus {
+  border-color: #0d7078;
+  box-shadow: 0 0 0 3px rgba(13, 112, 120, 0.12);
+  background: #ffffff;
+}
+
+.smartsure-form__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 13px;
+}
+
+.smartsure-form button[type='submit'] {
+  min-height: 50px;
+  margin-top: 4px;
+  border: 0;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #0d7078, #0a5a61);
+  color: #ffffff;
+  font-weight: 850;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(13, 112, 120, 0.25);
+  letter-spacing: 0.02em;
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+.smartsure-form button[type='submit']:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 32px rgba(13, 112, 120, 0.3);
+}
+
+.smartsure-form button[type='submit']:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.smartsure-switch {
+  width: 100%;
+  margin-top: 22px;
+  border: 0;
+  background: transparent;
+  color: #6b7280;
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.smartsure-switch:hover {
+  color: #0e6a72;
+}
+
+/* Success banner */
+.smartsure-success {
+  margin-bottom: 18px;
+  padding: 13px 15px;
+  border: 1px solid #bbf7d0;
+  border-radius: 15px;
+  background: #f0fdf4;
+  color: #15803d;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+/* Quote modal */
+.smartsure-quote-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.smartsure-quote-option {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 5px;
+  padding: 16px;
+  border: 1px solid #d1d9e0;
+  border-radius: 14px;
+  background: #f8fafb;
+  cursor: pointer;
+  text-align: left;
+  transition: all 180ms ease;
+}
+
+.smartsure-quote-option:hover {
+  border-color: #0d7078;
+  background: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(13, 112, 120, 0.15);
+}
+
+.smartsure-quote-option strong {
+  color: #0a1f2e;
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+.smartsure-quote-option span {
+  color: #5a6c7a;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: 0.01em;
+}
+
+.smartsure-quote-note {
+  margin: 0 0 16px;
+  color: #5a6c7a;
+  font-size: 13px;
+  font-weight: 600;
+  text-align: center;
+  letter-spacing: 0.01em;
+}
+
+.smartsure-quote-cta {
+  width: 100%;
+  min-height: 50px;
+  border: 0;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #0d7078, #0a5a61);
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 850;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(13, 112, 120, 0.25);
+  transition: transform 180ms ease, box-shadow 180ms ease;
+  letter-spacing: 0.02em;
+}
+
+.smartsure-quote-cta:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 32px rgba(13, 112, 120, 0.3);
+}
+
+.customer-shell {
+  background: #061722 !important;
+  color: #10222b;
+}
+
+.customer-shell aside {
+  background: linear-gradient(180deg, #04131e, #082333) !important;
+  color: #fff8ee;
+  border-color: rgba(255, 242, 227, 0.12) !important;
+}
+
+.customer-shell main {
+  background:
+    radial-gradient(circle at top right, rgba(29, 141, 141, 0.18), transparent 34%),
+    linear-gradient(135deg, #fff8ee 0%, #edf7f4 52%, #dfeeed 100%) !important;
+}
+
+.customer-shell header {
+  background: rgba(255, 248, 238, 0.88) !important;
+  border-color: rgba(14, 106, 114, 0.16) !important;
+}
+
+.customer-shell h1,
+.customer-shell h2,
+.customer-shell h3 {
+  color: #071824 !important;
+}
+
+.customer-shell p,
+.customer-shell label,
+.customer-shell .text-\[\#6a5852\],
+.customer-shell .text-\[\#3f302b\],
+.customer-shell .text-\[\#8b746b\] {
+  color: #38515a !important;
+}
+
+.customer-shell .text-\[\#db6b55\],
+.customer-shell .text-\[\#24805b\] {
+  color: #0e6a72 !important;
+}
+
+.customer-shell .bg-\[\#171717\],
+.customer-shell .hover\:bg-\[\#db6b55\]:hover {
+  background: #071824 !important;
+}
+
+.customer-shell .bg-\[\#db6b55\],
+.customer-shell .bg-\[\#24805b\],
+.customer-shell .bg-green-600 {
+  background: #0e6a72 !important;
+}
+
+.customer-shell .bg-\[\#fff7ee\],
+.customer-shell .bg-\[\#fff4e8\],
+.customer-shell .bg-\[\#faecdd\],
+.customer-shell .bg-white\/78,
+.customer-shell .bg-white\/70 {
+  background-color: rgba(255, 248, 238, 0.86) !important;
+}
+
+.customer-shell .border-\[\#ead8c8\],
+.customer-shell .hover\:border-\[\#db6b55\]\/40:hover {
+  border-color: rgba(14, 106, 114, 0.2) !important;
+}
+
+.customer-shell input,
+.customer-shell select {
+  border-color: rgba(14, 106, 114, 0.22) !important;
+  background: rgba(255, 255, 255, 0.72) !important;
+}
+
+.customer-shell input:focus,
+.customer-shell select:focus {
+  border-color: #0e6a72 !important;
+  box-shadow: 0 0 0 3px rgba(14, 106, 114, 0.16) !important;
+}
+
+.customer-shell input[type='range'] {
+  accent-color: #0e6a72;
+}
+
+.admin-shell {
+  background: #04131e !important;
+}
+
+.admin-shell aside,
+.admin-shell main,
+.admin-shell header {
+  border-color: rgba(255, 242, 227, 0.12) !important;
+}
+
+.admin-shell .text-\[\#E11D48\] {
+  color: #c8ece8 !important;
+}
+
+.admin-shell input:focus,
+.admin-shell select:focus {
+  border-color: #1d8d8d !important;
+}
+
+.admin-shell .bg-\[\#E11D48\],
+.admin-shell .hover\:bg-red-600:hover {
+  background: #0e6a72 !important;
+}
+
+@media (max-width: 900px) {
+  .smartsure-landing {
+    padding: 0;
+  }
+
+  .smartsure-stage {
+    width: 100%;
+    min-height: 100vh;
+    aspect-ratio: auto;
+  }
+
+  .smartsure-stage__image {
+    object-position: 72% center;
+  }
+
+  .smartsure-stage__shade {
+    background:
+      linear-gradient(90deg, rgba(4, 17, 28, 0.98), rgba(5, 31, 45, 0.92) 62%, rgba(5, 31, 45, 0.54)),
+      linear-gradient(180deg, rgba(4, 17, 28, 0.92), rgba(4, 17, 28, 0.12) 42%, rgba(4, 17, 28, 0.84));
+  }
+
+  .smartsure-stage__cover--nav {
+    height: 116px;
+  }
+
+  .smartsure-stage__cover--copy {
+    top: 104px;
+    width: 100%;
+    height: 560px;
+    background:
+      radial-gradient(circle at 36% 42%, rgba(4, 24, 38, 0.96), rgba(5, 31, 45, 0.9) 54%, rgba(5, 31, 45, 0.34) 82%, rgba(5, 31, 45, 0) 100%),
+      linear-gradient(90deg, rgba(4, 17, 28, 0.98), rgba(5, 31, 45, 0.84) 72%, rgba(5, 31, 45, 0));
+  }
+
+  .smartsure-nav {
+    grid-template-columns: 1fr auto;
+    height: auto;
+    padding: 26px 24px;
+  }
+
+  .smartsure-links {
+    display: none;
+  }
+
+  .smartsure-actions {
+    gap: 8px;
+  }
+
+  .smartsure-pill {
+    min-width: 68px;
+    height: 36px;
+    padding: 0 15px;
+  }
+
+  .smartsure-pill--quote {
+    min-width: 112px;
+    height: 42px;
+    font-size: 12px;
+  }
+
+  .smartsure-hero {
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: 132px 24px 116px;
+  }
+
+  .smartsure-hero__copy {
+    width: min(100%, 460px);
+    margin-top: 0;
+  }
+
+  .smartsure-hero__copy h1 {
+    font-size: clamp(32px, 9.8vw, 44px);
+    margin-bottom: 18px;
+  }
+
+  .smartsure-eyebrow {
+    min-height: 28px;
+    margin-bottom: 12px;
+    font-size: 10px;
+  }
+
+  .smartsure-hero__copy p {
+    margin-bottom: 18px;
+    font-size: 15px;
+  }
+
+  .smartsure-assurance-card {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    width: min(100%, 340px);
+    gap: 8px;
+    margin-bottom: 22px;
+  }
+
+  .smartsure-assurance-card div {
+    min-height: 70px;
+    display: block;
+    padding: 12px 10px;
+  }
+
+  .smartsure-assurance-card strong {
+    font-size: 21px;
+  }
+
+  .smartsure-assurance-card span {
+    margin-top: 7px;
+    text-align: left;
+    font-size: 10px;
+  }
+
+  .smartsure-insight-panel {
+    display: none;
+  }
+
+  .smartsure-chat {
+    position: fixed;
+    right: 26px;
+    bottom: 28px;
+    width: 66px;
+    height: 66px;
+    font-size: 12px;
+  }
+
+  .smartsure-support {
+    position: fixed;
+    right: 24px;
+    bottom: 116px;
+  }
+}
+
+@media (max-width: 540px) {
+  .smartsure-nav {
+    align-items: flex-start;
+  }
+
+  .smartsure-actions {
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  .smartsure-brand {
+    font-size: 22px;
+  }
+
+  .smartsure-pill--quote {
+    min-width: 104px;
+    height: 40px;
+    padding: 0 13px;
+  }
+
+  .smartsure-hero__copy p {
+    max-width: 315px;
+  }
+
+  .smartsure-assurance-card {
+    display: none;
+  }
+
+  .smartsure-footer {
+    padding: 0 86px 0 24px;
+    text-align: left;
+  }
+
+  .smartsure-form__grid {
+    grid-template-columns: 1fr;
+  }
+
+  .smartsure-phone-field {
+    flex-direction: column;
+  }
+
+  .smartsure-phone-field select {
+    flex-basis: auto;
+  }
+
+  .smartsure-modal__panel {
+    padding: 32px 22px 26px;
+    border-radius: 22px;
+  }
+}
