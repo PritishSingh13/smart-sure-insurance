@@ -14,8 +14,9 @@ export class AuthGuard implements CanActivate {
     state: RouterStateSnapshot): boolean {
     
     if (this.authService.getToken()) {
-        const expectedRole = route.data['role'];
-        if (expectedRole && this.authService.getRole() !== expectedRole) {
+        const expectedRole = String(route.data['role'] ?? '').toUpperCase();
+        const actualRole = String(this.authService.getRole() ?? '').toUpperCase();
+        if (expectedRole && actualRole !== expectedRole) {
             // Not authorized for this specific dashboard
             this.router.navigate(['/']); 
             return false;

@@ -8,10 +8,11 @@ export class AuthInterceptor implements HttpInterceptor {
 
   constructor(private authService: AuthApiService) {}
 
-  intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    // Exclude auth routes
-    if (request.url.includes('/api/auth/')) {
-        return next.handle(request);
+  intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
+    const isPublicAuthRoute = request.url.includes('/api/auth/login') || request.url.includes('/api/auth/register');
+
+    if (isPublicAuthRoute) {
+      return next.handle(request);
     }
 
     const token = this.authService.getToken();
