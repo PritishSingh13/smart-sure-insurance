@@ -1,19 +1,17 @@
 package com.smartsure.authservice.dto;
 
-import jakarta.validation.constraints.*;
-import lombok.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import lombok.Data;
 
 @Data
-public class RegisterRequest {
-
+public class UpdateProfileRequest {
     @NotBlank(message = "Name is required")
     private String name;
 
     @Email(message = "Invalid email format")
     private String email;
-
-    @NotBlank(message = "Password is required")
-    private String password;
 
     @Pattern(regexp = "(\\d{10}|\\+\\d{1,4}\\s?\\d{6,14})", message = "Phone must include a valid number")
     private String phone;
@@ -21,6 +19,5 @@ public class RegisterRequest {
     @NotBlank(message = "Address is required")
     private String address;
 
-    @NotBlank(message = "Role is required")
-    private String role;
+    private String profileImage;
 }

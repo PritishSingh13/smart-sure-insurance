@@ -70,4 +70,67 @@ public class AuthService {
 
         return new AuthResponse(token, role, user.getEmail());
     }
+
+    // =========================
+    // GET ALL USERS
+    // =========================
+    public java.util.List<User> getAllUsers() {
+        return userRepository.findAll();
+    }
+
+    public User getUserByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+    }
+
+    public UserProfileDto getUserProfileByEmail(String email) {
+        return toUserProfile(getUserByEmail(email));
+    }
+
+    public java.util.List<UserProfileDto> getAllUserProfiles() {
+        return userRepository.findAll()
+                .stream()
+                .map(this::toUserProfile)
+                .toList();
+    }
+
+    public ProfileUpdateResponse updateProfile(String currentEmail, UpdateProfileRequest request) {
+        User user = getUserByEmail(currentEmail);
+
+        String nextEmail = request.getEmail().trim().toLowerCase();
+        userRepository.findByEmail(nextEmail)
+                .filter(existing -> !existing.getId().equals(user.getId()))
+                .ifPresent(existing -> {
+                    throw new RuntimeException("Email already exists");
+                });
+
+        user.setName(request.getName().trim());
+        user.setEmail(nextEmail);
+        user.setPhone(request.getPhone().trim());
+        user.setAddress(request.getAddress().trim());
+        user.setProfileImage(request.getProfileImage());
+
+        User savedUser = userRepository.save(user);
+        String role = savedUser.getRole().trim().toUpperCase();
+        String token = jwtUtil.generateToken(savedUser.getEmail(), role);
+
+        return new ProfileUpdateResponse(
+                token,
+                role,
+                savedUser.getEmail(),
+                toUserProfile(savedUser)
+        );
+    }
+
+    private UserProfileDto toUserProfile(User user) {
+        return new UserProfileDto(
+                user.getId(),
+                user.getName(),
+                user.getEmail(),
+                user.getPhone(),
+                user.getAddress(),
+                user.getRole(),
+                user.getProfileImage()
+        );
+    }
 }
