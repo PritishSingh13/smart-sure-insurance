@@ -1,0 +1,277 @@
+<div class="customer-shell min-h-screen bg-[#fff4e8] flex font-sans overflow-hidden relative text-[#171717]">
+  <div *ngIf="isInitialLoading" class="absolute inset-0 z-50 bg-[#fff7ee]/90 backdrop-blur-md flex items-center justify-center">
+    <div class="text-center">
+      <div class="w-20 h-20 rounded-full border-4 border-[#f3d0bf] border-t-[#db6b55] animate-spin mx-auto mb-6"></div>
+      <div class="text-2xl font-black text-[#171717] tracking-[0.2em] uppercase mb-2">SmartSure</div>
+      <div class="text-[#6a5852] font-medium">Loading your dashboard...</div>
+    </div>
+  </div>
+
+  <aside class="w-64 bg-[#171717] text-white flex flex-col shadow-2xl z-20 hidden md:flex">
+    <button type="button" (click)="goToMarketplace(); playLogoPulse()" class="p-6 border-b border-white/10 text-left hover:bg-white/10 transition">
+      <span class="font-black text-2xl uppercase italic tracking-widest drop-shadow-md">SMARTSURE</span>
+      <span class="block text-[10px] font-black text-[#db6b55] mt-1 uppercase tracking-widest">Customer Portal</span>
+    </button>
+
+    <nav class="flex-1 px-4 py-6 space-y-2">
+      <button type="button" (click)="activeTab = 'marketplace'" class="w-full text-left flex items-center space-x-3 px-4 py-3 rounded-xl font-bold transition"
+        [ngClass]="activeTab === 'marketplace' ? 'bg-[#fff4e8] text-[#171717]' : 'text-white hover:bg-[#fff4e8] hover:text-[#171717]'">
+        <span>Available Policies</span>
+      </button>
+      <button type="button" (click)="activeTab = 'coverages'" class="w-full text-left flex items-center space-x-3 px-4 py-3 rounded-xl font-bold transition"
+        [ngClass]="activeTab === 'coverages' ? 'bg-[#fff4e8] text-[#171717]' : 'text-white hover:bg-[#fff4e8] hover:text-[#171717]'">
+        <span>My Coverages</span>
+      </button>
+      <button type="button" (click)="activeTab = 'claims'" class="w-full text-left flex items-center space-x-3 px-4 py-3 rounded-xl font-bold transition"
+        [ngClass]="activeTab === 'claims' ? 'bg-[#fff4e8] text-[#171717]' : 'text-white hover:bg-[#fff4e8] hover:text-[#171717]'">
+        <span>Claims</span>
+      </button>
+      <button type="button" (click)="activeTab = 'profile'" class="w-full text-left flex items-center space-x-3 px-4 py-3 rounded-xl font-bold transition"
+        [ngClass]="activeTab === 'profile' ? 'bg-[#fff4e8] text-[#171717]' : 'text-white hover:bg-[#fff4e8] hover:text-[#171717]'">
+        <span>My Profile</span>
+      </button>
+    </nav>
+
+    <div class="p-4 border-t border-white/10">
+      <button (click)="logout()" class="w-full flex items-center justify-center space-x-2 bg-black/20 hover:bg-black/40 px-4 py-3 rounded-xl font-bold transition text-sm">
+        <span>Log Out</span>
+      </button>
+    </div>
+  </aside>
+
+  <main class="flex-1 flex flex-col h-screen overflow-y-auto bg-gradient-to-br from-[#fff7ee] to-[#faecdd] relative scroll-smooth">
+    <header class="w-full bg-[#fff7ee]/85 backdrop-blur-md border-b border-[#ead8c8] py-4 px-8 flex justify-between items-center sticky top-0 z-10 shadow-sm">
+      <h2 class="text-xl font-black text-[#171717] tracking-wide uppercase">{{ activeTab }}</h2>
+      <div class="flex items-center space-x-4">
+        <button type="button" (click)="goToProfile()" class="w-10 h-10 bg-[#171717] text-white rounded-full flex items-center justify-center font-bold text-lg shadow-lg hover:scale-105 transition overflow-hidden">
+          <img *ngIf="savedProfileImage" [src]="savedProfileImage" alt="Profile" class="w-full h-full object-cover">
+          <span *ngIf="!savedProfileImage">{{ avatarLabel }}</span>
+        </button>
+        <span class="font-bold text-[#3f302b] hidden sm:block">{{ displayName }}</span>
+      </div>
+    </header>
+
+    <div *ngIf="activeTab === 'marketplace'" class="p-8 md:p-12 max-w-7xl mx-auto w-full animate-fade-in-up">
+      <div class="flex flex-col md:flex-row justify-between md:items-end mb-8 gap-6">
+        <div>
+          <h1 class="text-4xl font-black text-[#090909] mb-2">Policy Marketplace</h1>
+          <p class="text-[#6a5852] font-medium text-lg">Browse our available coverage plans and select the one that fits your needs.</p>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div *ngFor="let policy of policies" class="bg-white/78 rounded-3xl shadow-[0_15px_35px_rgba(56,35,24,0.08)] p-8 border border-[#ead8c8] hover:-translate-y-2 hover:border-[#db6b55]/40 transition-all duration-300 backdrop-blur">
+      <div class="text-[#db6b55] font-black text-xs tracking-[0.2em] uppercase mb-4">{{ policy.policyType }}</div>
+          <h2 class="text-2xl font-black text-[#090909] mb-3 tracking-tight">{{ policy.policyName }}</h2>
+          <p class="text-[#6a5852] mb-8 min-h-[60px] leading-relaxed text-sm">{{ policy.description }}</p>
+
+          <div class="flex justify-between items-center bg-[#fff7ee] p-5 rounded-2xl mb-8 border border-[#ead8c8]">
+            <div>
+              <span class="block text-[10px] text-[#8b746b] font-black uppercase tracking-widest mb-1">Coverage Limit</span>
+              <span class="font-black text-[#171717] text-lg">Rs {{ policy.coverageAmount | number }}</span>
+            </div>
+            <div class="text-right">
+              <span class="block text-[10px] text-[#8b746b] font-black uppercase tracking-widest mb-1">Premium</span>
+              <span class="font-black text-[#db6b55] text-xl">Rs {{ policy.premium | number }}/yr</span>
+            </div>
+          </div>
+
+          <button (click)="purchasePolicy(policy.id, policy.policyName)" [disabled]="purchasingPolicyId === policy.id" class="w-full bg-[#171717] hover:bg-[#db6b55] text-white font-bold py-4 rounded-xl transition-colors duration-300 shadow-lg disabled:opacity-60 disabled:cursor-not-allowed">
+            {{ purchasingPolicyId === policy.id ? 'Purchasing...' : 'Purchase Plan' }}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="activeTab === 'coverages'" class="p-8 md:p-12 max-w-5xl mx-auto w-full animate-fade-in-up">
+      <h1 class="text-4xl font-black text-[#090909] mb-2">My Active Coverages</h1>
+      <p class="text-[#6a5852] font-medium mb-10 text-lg">Your purchased policies and their current coverage details.</p>
+
+      <div *ngIf="myPolicies.length === 0" class="bg-white/78 p-8 rounded-3xl border border-[#ead8c8] shadow-lg text-[#6a5852] font-medium">
+        You have not purchased any policy yet.
+      </div>
+
+      <div class="space-y-6">
+        <div *ngFor="let policy of myPolicies" class="bg-white/78 p-6 rounded-3xl shadow-lg border border-[#ead8c8] flex flex-col md:flex-row justify-between md:items-center relative overflow-hidden group hover:border-[#db6b55]/40 transition">
+          <div class="absolute left-0 top-0 h-full w-2 bg-[#24805b]"></div>
+          <div class="flex items-center space-x-6 ml-4 mb-4 md:mb-0">
+            <div>
+              <span class="px-3 py-1 bg-[#e8f5ee] text-[#24805b] text-[10px] font-black tracking-widest uppercase rounded-full border border-[#c7e7d5]">Active</span>
+              <h3 class="text-2xl font-black text-[#090909] mt-2">{{ policy.policyName }}</h3>
+              <p class="text-[#6a5852] text-sm font-medium">{{ policy.policyType }} coverage</p>
+            </div>
+          </div>
+          <div class="flex flex-col md:items-end ml-4 md:ml-0 space-y-4">
+            <div class="text-left md:text-right">
+              <span class="block text-xs text-[#8b746b] font-bold uppercase tracking-widest mb-1">Coverage Limit</span>
+              <span class="font-black text-xl text-[#090909]">Rs {{ policy.coverageAmount | number }}</span>
+            </div>
+            <div class="text-left md:text-right">
+              <span class="block text-xs text-[#8b746b] font-bold uppercase tracking-widest mb-1">Premium</span>
+              <span class="font-black text-lg text-[#db6b55]">Rs {{ policy.premium | number }}/yr</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="activeTab === 'claims'" class="p-8 md:p-12 max-w-5xl mx-auto w-full animate-fade-in-up">
+      <h1 class="text-4xl font-black text-[#090909] mb-2">Submit & Track Claims</h1>
+      <p class="text-[#6a5852] font-medium mb-10 text-lg">Upload your claim document, submit it for review, and monitor the status in real time.</p>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div class="bg-white/78 p-8 rounded-3xl shadow-2xl border border-[#ead8c8]">
+          <div class="mb-6">
+            <label class="block text-sm font-bold text-[#3f302b] mb-2">Select Associated Policy</label>
+            <select [(ngModel)]="selectedPolicyId" class="w-full bg-[#fff7ee] border border-[#ead8c8] rounded-xl px-4 py-3 text-[#3f302b] font-medium focus:outline-none focus:ring-2 focus:ring-[#db6b55]">
+              <option [ngValue]="null">Choose a policy</option>
+              <option *ngFor="let policy of myPolicies" [ngValue]="policy.id">
+                {{ policy.policyName }} (#{{ policy.id }})
+              </option>
+            </select>
+          </div>
+
+          <div class="mb-8">
+            <label class="block text-sm font-bold text-[#3f302b] mb-2">Claim Document</label>
+            <input #claimFileInput type="file" accept="application/pdf" (change)="onFileSelected($event)" class="w-full bg-[#fff7ee] border border-[#ead8c8] rounded-xl px-4 py-3 text-[#3f302b] font-medium">
+            <p class="text-xs text-[#6a5852] mt-2">Only PDF files are accepted for claim submissions.</p>
+            <p *ngIf="selectedFileName" class="text-xs text-[#0e6a72] mt-2 font-bold">Selected: {{ selectedFileName }}</p>
+          </div>
+
+          <button (click)="submitClaim()" [disabled]="submitState === 'submitting' || isClaimActionLocked || !selectedPolicyId || !selectedFile" class="w-full text-white font-bold py-4 rounded-xl transition shadow-xl text-lg disabled:opacity-60"
+            [ngClass]="submitState === 'submitted' ? 'bg-[#24805b]' : 'bg-[#171717] hover:bg-[#db6b55]'">
+            {{ submitMessage }}
+          </button>
+        </div>
+
+        <div class="bg-white/78 p-8 rounded-3xl shadow-2xl border border-[#ead8c8]">
+          <h3 class="text-2xl font-black text-[#090909] mb-6">Recent Claims</h3>
+          <div *ngIf="myClaims.length === 0" class="text-[#6a5852] font-medium">
+            No claims found for your account yet.
+          </div>
+
+          <div class="space-y-4" *ngIf="myClaims.length > 0">
+            <div *ngFor="let claim of myClaims" class="border border-[#ead8c8] rounded-2xl p-5 bg-[#fff7ee]">
+              <div class="flex justify-between gap-4 items-start flex-wrap">
+                <div class="flex-1 min-w-[200px]">
+                  <div class="text-xs font-black uppercase tracking-[0.2em] text-[#8b746b] mb-2">Claim Number</div>
+                  <div class="text-lg font-black text-[#090909]">{{ claim.claimNumber }}</div>
+                  <div class="text-sm text-[#6a5852] mt-1">Policy ID: {{ claim.policyId }}</div>
+                  <div *ngIf="claim.documentFileName" class="text-xs text-[#6a5852] mt-1">Document: {{ claim.documentFileName }}</div>
+                </div>
+                <div class="flex flex-col items-end gap-3 flex-shrink-0">
+                  <span class="px-3 py-1 rounded-full text-xs font-black tracking-widest uppercase whitespace-nowrap"
+                    [ngClass]="{
+                      'bg-yellow-100 text-yellow-700': claim.status === 'UPLOADED' || claim.status === 'SUBMITTED',
+                      'bg-green-100 text-green-700': claim.status === 'APPROVED',
+                      'bg-red-100 text-red-700': claim.status === 'REJECTED'
+                    }">
+                    {{ claim.status }}
+                  </span>
+                  <button type="button" (click)="viewClaimDocument(claim)" class="px-4 py-2 bg-[#071824] hover:bg-[#0e6a72] text-white rounded-lg text-xs font-bold transition whitespace-nowrap">
+                    View Upload
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="activeTab === 'profile'" class="p-8 md:p-12 max-w-5xl mx-auto w-full animate-fade-in-up">
+      <div class="bg-white/78 rounded-3xl shadow-2xl border border-[#ead8c8] overflow-hidden relative">
+        <div class="h-32 bg-gradient-to-r from-[#171717] to-[#db6b55]"></div>
+
+        <div class="px-8 pb-8">
+          <div class="flex flex-col md:flex-row md:justify-between md:items-end -mt-12 mb-8 gap-6">
+            <div class="flex items-end gap-5">
+              <div class="w-24 h-24 bg-white rounded-2xl shadow-xl flex items-center justify-center border-4 border-white text-[#db6b55] text-4xl font-black overflow-hidden">
+                <img *ngIf="editableProfileImage" [src]="editableProfileImage" alt="Profile" class="w-full h-full object-cover">
+                <span *ngIf="!editableProfileImage">{{ avatarLabel }}</span>
+              </div>
+              <label class="bg-[#171717] hover:bg-[#db6b55] text-white px-4 py-3 rounded-xl font-bold transition cursor-pointer text-sm">
+                Upload Photo
+                <input type="file" accept="image/*" (change)="onProfileImageSelected($event)" class="hidden">
+              </label>
+            </div>
+            <div class="bg-[#fff4e8] border border-[#ead8c8] text-[#6a5852] px-4 py-2 rounded-full font-black text-xs uppercase tracking-widest shadow-sm">
+              {{ profile?.role || 'CUSTOMER' }}
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label class="block text-xs text-[#8b746b] font-bold uppercase tracking-widest mb-2">Full Name</label>
+              <input [(ngModel)]="editProfileModel.name" (ngModelChange)="profileSaveState = 'idle'" type="text" class="w-full bg-[#fff7ee] border border-[#ead8c8] rounded-xl px-4 py-3 text-[#171717] font-medium">
+            </div>
+            <div>
+              <label class="block text-xs text-[#8b746b] font-bold uppercase tracking-widest mb-2">Account Email</label>
+              <input [(ngModel)]="editProfileModel.email" (ngModelChange)="profileSaveState = 'idle'" type="email" class="w-full bg-[#fff7ee] border border-[#ead8c8] rounded-xl px-4 py-3 text-[#171717] font-medium">
+            </div>
+            <div>
+              <label class="block text-xs text-[#8b746b] font-bold uppercase tracking-widest mb-2">Phone Number</label>
+              <input [(ngModel)]="editProfileModel.phone" (ngModelChange)="profileSaveState = 'idle'" type="text" class="w-full bg-[#fff7ee] border border-[#ead8c8] rounded-xl px-4 py-3 text-[#171717] font-medium">
+            </div>
+            <div>
+              <label class="block text-xs text-[#8b746b] font-bold uppercase tracking-widest mb-2">Home Address</label>
+              <input [(ngModel)]="editProfileModel.address" (ngModelChange)="profileSaveState = 'idle'" type="text" class="w-full bg-[#fff7ee] border border-[#ead8c8] rounded-xl px-4 py-3 text-[#171717] font-medium">
+            </div>
+          </div>
+
+          <div class="mt-8 flex justify-end gap-3">
+            <button type="button" (click)="discardProfileEdits()" [disabled]="isProfileSaving" class="bg-[#fff7ee] border border-[#ead8c8] text-[#6a5852] hover:text-[#171717] px-6 py-3 rounded-xl font-bold transition disabled:opacity-60">
+              Cancel
+            </button>
+            <button (click)="saveProfile()" [disabled]="isProfileSaving" class="bg-[#171717] hover:bg-[#db6b55] text-white px-6 py-3 rounded-xl font-bold transition shadow-lg disabled:opacity-60"
+              [ngClass]="profileSaveState === 'saved' ? 'bg-[#24805b]' : ''">
+              {{ isProfileSaving ? 'Saving...' : (profileSaveState === 'saved' ? 'Saved' : 'Save Profile') }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div class="fixed bottom-8 right-8 z-50">
+    <div *ngIf="showChat" class="bg-white w-80 h-96 rounded-3xl shadow-[0_30px_60px_rgba(0,0,0,0.3)] border border-gray-200 mb-4 flex flex-col overflow-hidden animate-fade-in-up">
+      <div class="bg-[#171717] p-4 text-white flex justify-between items-center">
+        <span class="font-bold">24/7 Support Agent</span>
+        <button (click)="showChat = false" class="hover:text-red-200 font-bold">x</button>
+      </div>
+      <div class="flex-1 p-4 bg-[#fff7ee] flex flex-col space-y-4 overflow-y-auto">
+        <div class="bg-[#faecdd] text-[#3f302b] p-3 rounded-tr-2xl rounded-br-2xl rounded-bl-2xl max-w-[80%] text-sm font-medium">
+          Hello. How can we help you today? You can ask about your policy, coverage details, or how to file a claim.
+        </div>
+      </div>
+    </div>
+    <button (click)="showChat = !showChat" class="w-16 h-16 bg-[#171717] hover:bg-[#db6b55] text-white rounded-full shadow-2xl flex items-center justify-center text-sm font-bold transition-transform hover:scale-110 ml-auto block">
+      Help
+    </button>
+  </div>
+
+  <div *ngIf="toast.show" class="fixed bottom-8 left-1/2 transform -translate-x-1/2 z-50 animate-fade-in-up">
+    <div class="px-6 py-4 rounded-xl shadow-2xl flex items-center space-x-3 text-white font-bold tracking-wide"
+      [ngClass]="toast.type === 'success' ? 'bg-green-600' : 'bg-red-600'">
+      <span>{{ toast.message }}</span>
+    </div>
+  </div>
+
+  <div *ngIf="showClaimDocumentModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm animate-fade-in-up">
+    <div class="bg-white border border-[#ead8c8] p-6 rounded-3xl max-w-4xl w-full mx-4 shadow-2xl">
+      <div class="flex justify-between items-center mb-5">
+        <div>
+          <h3 class="text-[#071824] font-black text-xl">Uploaded Claim Document</h3>
+          <p class="text-[#38515a] text-sm font-bold">{{ selectedClaimForView?.claimNumber }}</p>
+        </div>
+        <button type="button" (click)="closeClaimDocumentModal()" class="text-[#38515a] hover:text-[#071824] font-black text-xl">x</button>
+      </div>
+      <div class="bg-[#fff7ee] border border-[#ead8c8] rounded-xl p-4 min-h-[28rem]">
+        <div *ngIf="isClaimDocumentLoading" class="h-[26rem] flex items-center justify-center text-[#38515a] font-medium">
+          Loading claim document...
+        </div>
+        <iframe *ngIf="!isClaimDocumentLoading && claimDocumentPreviewUrl" [src]="claimDocumentPreviewUrl" class="w-full h-[26rem] rounded-lg bg-white"></iframe>
+      </div>
+    </div>
+  </div>
+</div>
