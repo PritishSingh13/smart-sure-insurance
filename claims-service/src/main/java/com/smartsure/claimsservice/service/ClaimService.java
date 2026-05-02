@@ -14,6 +14,8 @@ import java.util.*;
 @Service
 public class ClaimService {
 
+
+    //injected the claimrepo for db access
     private final ClaimRepository claimRepository;
     private final String uploadDir = "uploads/";
 
@@ -37,8 +39,11 @@ public class ClaimService {
             throw new RuntimeException("Claimant name is required");
         }
 
+
+        //Create object
         Claim claim = new Claim();
 
+        //set values
         claim.setPolicyId(policyId);
         claim.setClaimantName(claimantName);
 
@@ -46,6 +51,7 @@ public class ClaimService {
         claim.setClaimType("GENERAL");
         claim.setClaimAmount(0.0);
 
+        //default value
         claim.setStatus("UPLOADED");
         claim.setClaimDate(LocalDate.now());
         claim.setCreatedBy(userEmail);
@@ -64,6 +70,8 @@ public class ClaimService {
                 String fileName = System.currentTimeMillis() + "_" + file.getOriginalFilename();
                 Path filePath = folderPath.resolve(fileName);
 
+
+                //File Handling
                 Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
                 claim.setDocumentPath(filePath.toString());
 
@@ -72,6 +80,7 @@ public class ClaimService {
             }
         }
 
+        // Save in Db
         Claim saved = claimRepository.save(claim);
         return convertToDto(saved);
     }
@@ -141,24 +150,47 @@ public class ClaimService {
         return claimRepository.findAll();
     }
 
+    public Claim getClaimById(Long claimId) {
+        return claimRepository.findById(claimId)
+                .orElseThrow(() -> new RuntimeException("Claim not found"));
+    }
+
+    public Claim getClaimForUserByNumber(String claimNumber, String userEmail) {
+        Claim claim = claimRepository.findByClaimNumber(claimNumber)
+                .orElseThrow(() -> new RuntimeException("Claim not found"));
+
+        if (claim.getCreatedBy() == null || !claim.getCreatedBy().equals(userEmail)) {
+            throw new RuntimeException("Unauthorized access");
+        }
+
+        return claim;
+    }
+
     // =========================
     public Map<String, Long> getReportData() {
 
         Map<String, Long> report = new HashMap<>();
 
         long total = claimRepository.count();
-        long approved = claimRepository.findAll().stream()
-                .filter(c -> "APPROVED".equalsIgnoreCase(c.getStatus()))
-                .count();
-        long rejected = claimRepository.findAll().stream()
-                .filter(c -> "REJECTED".equalsIgnoreCase(c.getStatus()))
-                .count();
+        long approved = claimRepository.countByStatusIgnoreCase("APPROVED");
+        long rejected = claimRepository.countByStatusIgnoreCase("REJECTED");
 
         report.put("TOTAL_CLAIMS", total);
         report.put("APPROVED", approved);
         report.put("REJECTED", rejected);
 
         return report;
+    }
+
+    public List<ClaimDto> getClaimsForUser(String userEmail) {
+        if (userEmail == null || userEmail.isBlank()) {
+            throw new RuntimeException("User email is required");
+        }
+
+        return claimRepository.findByCreatedBy(userEmail)
+                .stream()
+                .map(this::convertToDto)
+                .toList();
     }
 
     // =========================
@@ -168,6 +200,12 @@ public class ClaimService {
         dto.setPolicyId(claim.getPolicyId());
         dto.setClaimantName(claim.getClaimantName());
         dto.setStatus(claim.getStatus());
+        dto.setClaimDate(claim.getClaimDate());
+
+        if (claim.getDocumentPath() != null && !claim.getDocumentPath().isBlank()) {
+            dto.setDocumentFileName(Paths.get(claim.getDocumentPath()).getFileName().toString());
+        }
+
         return dto;
     }
 }
