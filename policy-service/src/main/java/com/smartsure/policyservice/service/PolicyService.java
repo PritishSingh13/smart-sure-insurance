@@ -13,6 +13,8 @@ import java.util.List;
 @Service
 public class PolicyService {
 
+
+    //depencies injection to use those logics here
     private final PolicyRepository policyRepository;
     private final PolicyPurchaseRepository purchaseRepository;
 
@@ -124,6 +126,24 @@ public class PolicyService {
                 "Policy Name: " + policy.getPolicyName() + "\n" +
                 "User Email: " + userEmail + "\n" +
                 "👉 Use this Policy ID for Claims: " + policy.getId();
+    }
+
+    public List<Policy> getPoliciesForUser(String userEmail) {
+        if (userEmail == null || userEmail.isBlank()) {
+            throw new RuntimeException("User email is required");
+        }
+
+        List<Long> policyIds = purchaseRepository.findByUserEmail(userEmail)
+                .stream()
+                .map(PolicyPurchase::getPolicyId)
+                .distinct()
+                .toList();
+
+        if (policyIds.isEmpty()) {
+            return List.of();
+        }
+
+        return policyRepository.findAllById(policyIds);
     }
 
     // =========================
